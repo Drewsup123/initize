@@ -15,15 +15,11 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = theme => ({
     main: {
-        width: 'auto',
-        display: 'block', // Fix IE 11 issue.
-        marginLeft: theme.spacing.unit * 3,
-        marginRight: theme.spacing.unit * 3,
-        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-        width: 400,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        },
+        width:"100%",
+        height:"100vh",
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center"
     },
     paper: {
         marginTop: theme.spacing.unit * 8,
@@ -45,7 +41,7 @@ const styles = theme => ({
     },
 });
 
-function SignIn(props) {
+function Login(props) {
     const { classes } = props;
 
     return (
@@ -78,7 +74,7 @@ function SignIn(props) {
                 color="primary"
                 className={classes.submit}
             >
-                Sign in
+                Login
             </Button>
             </form>
         </Paper>
@@ -86,8 +82,8 @@ function SignIn(props) {
     );
 }
 
-SignIn.propTypes = {
+Login.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+export default withStyles(styles)(Login);

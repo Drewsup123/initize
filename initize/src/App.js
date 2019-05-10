@@ -13,14 +13,14 @@ import { Route } from 'react-router-dom';
 function App() {
   const {state} = React.useContext(Store);
   return (
-    <React.Fragment>
+    <div className="App">
         <Route exact path="/" render={()=>state.loggedIn ? <Confirm/> : <LandingPage />} />
         <Route path="/login" render={()=><Login />} />
         <Route path="/sign-up" render={()=><SignUp />} />
         <Route path="/dashboard" render={()=><Dashboard />} />
         <Route path="/messages" render={()=><Messages />} />
         <Route path="/Account" render={()=><Account />} />
-    </React.Fragment>
+    </div>
   )
 }
 
