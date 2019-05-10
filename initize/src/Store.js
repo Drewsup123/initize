@@ -4,10 +4,17 @@ export const Store = React.createContext(); //creates context object
 
 const initialState = {
     loggedIn: false,
+    email:"",
+    name:"",
+    phoneNumber:"",
+    uid:"",
 }
 
 function reducer(state, action) {
     switch(action.type){
+        case 'SIGNUP':
+            const {email, phoneNumber, name, uid} = action.payload;
+            return {...state,loggedIn:true, email : email, name: name, phoneNumber: phoneNumber, uid:uid}
         default:
             return state;
     }

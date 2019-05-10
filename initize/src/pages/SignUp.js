@@ -11,6 +11,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import * as firebase from "firebase/app"; 
+import {Store} from '../Store';
+import { Redirect, withRouter } from 'react-router-dom';
 
 const styles = theme => ({
     main: {
@@ -42,45 +45,132 @@ const styles = theme => ({
 
 function SignIn(props) {
     const { classes } = props;
+    const {dispatch} = React.useContext(Store);
+
+    const [userInfo, setUserInfo] = React.useState({email:"", name:"", phoneNumber:""});
+    const [password, setPassword] = React.useState({password1:"", password2:""});
+    const [errorMessage, setErrorMessage] = React.useState("");
+    const [remember, setRemember] = React.useState(false);
+
+    const passwordValid = () => {
+        const {password1, password2} = password
+        if(password1.length === 0 || password2.length===0){
+            setErrorMessage("Please fill out password fields")
+            return false;
+        }
+        else if(password1 !== password2){
+            setErrorMessage("Passwords do not match")
+            return false;
+        }
+        else if(password1.length < 7){
+            setErrorMessage("Password is too short")
+            return false;
+        }
+        return true;
+    }
+
+    const handlePassword = e => {
+        setPassword({...password, [e.target.name]: e.target.value})
+    }
+
+    const handleChange = e => {
+        setUserInfo({...userInfo, [e.target.name] : e.target.value})
+        console.log(userInfo);
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        const {email, name} = userInfo;
+        if(!email || !name || !passwordValid()){
+            if(!email){
+                setErrorMessage("Please input an email")
+            }
+            else if(!name){
+                setErrorMessage("Please input your name")
+            }
+            return;
+        }else{
+            firebase.auth().createUserWithEmailAndPassword(userInfo.email, password.password1)
+            .then(res => {
+                console.log(res);
+                const user = {
+                    email: userInfo.email,
+                    name: userInfo.name,
+                    phoneNumber: userInfo.phoneNumber,
+                    uid: res.uid,
+                }
+                if(remember){
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+                dispatch({type:"SIGNUP", payload:user});
+                console.log("REDIRECTING")
+                props.history.push('/dashboard')
+            })
+            .catch(error => {
+                alert("Sorry there was an error adding your user");
+            });
+        }
+    }
 
     return (
         <main className={classes.main}>
-        <Paper className={classes.paper}>
-            <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-            Sign Up
-            </Typography>
-            <form className={classes.form}>
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                Sign Up
+                </Typography>
 
-                <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="email">Email Address</InputLabel>
-                    <Input id="email" name="email" autoComplete="email" autoFocus />
-                </FormControl>
+                <Typography component="h1" variant="h5">
+                {errorMessage}
+                </Typography>
+                <form onSubmit={handleSubmit} className={classes.form}>
 
-                <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <Input name="password" type="password" id="password" autoComplete="current-password" />
-                </FormControl>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="email">Email Address</InputLabel>
+                        <Input onChange={handleChange} id="email" name="email" autoComplete="email" autoFocus />
+                    </FormControl>
 
-                <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                />
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="name">First and Last Name</InputLabel>
+                        <Input onChange={handleChange} id="username" name="name" autoComplete="name" autoFocus />
+                    </FormControl>
 
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                >
-                    Sign in
-                </Button>
-            </form>
+                    <FormControl margin="normal" fullWidth>
+                        <InputLabel htmlFor="email">Phone Number</InputLabel>
+                        <Input onChange={handleChange} id="phoneNumber" name="phoneNumber" autoComplete="tel" autoFocus />
+                    </FormControl>
 
-        </Paper>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <Input onChange={handlePassword} name="password1" type="password" id="password1" />
+                    </FormControl>
+
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="password">Confirm Password</InputLabel>
+                        <Input onChange={handlePassword} name="password2" type="password" id="password2" />
+                    </FormControl>
+
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Remember me"
+                        onChange={()=>setRemember(!remember)}
+                    />
+
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={handleSubmit}
+                    >
+                        Sign Up
+                    </Button>
+                </form>
+
+            </Paper>
         </main>
     );
 }
@@ -89,4 +179,6 @@ SignIn.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+const ws = withStyles(styles)(SignIn)
+
+export default withRouter(ws)

@@ -17,6 +17,7 @@ function App() {
         <Route exact path="/" render={()=>state.loggedIn ? <Confirm/> : <LandingPage />} />
         <Route path="/login" render={()=><Login />} />
         <Route path="/sign-up" render={()=><SignUp />} />
+        {/* Add LoggedIn conditionals to this later */}
         <Route path="/dashboard" render={()=><Dashboard />} />
         <Route path="/messages" render={()=><Messages />} />
         <Route path="/Account" render={()=><Account />} />
