@@ -41,6 +41,14 @@ const styles = theme => ({
     submit: {
         marginTop: theme.spacing.unit * 3,
     },
+    span:{
+        color:"blue",
+        cursor:"pointer",
+        '&:hover':{
+            color:"darkblue",
+            textDecoration:"underline"
+        }
+    }
 });
 
 function SignIn(props) {
@@ -169,7 +177,7 @@ function SignIn(props) {
                         Sign Up
                     </Button>
                 </form>
-
+                <p>Already have an account? Login <span className={classes.span} onClick={()=>props.history.push('/login')}>here</span></p>
             </Paper>
         </main>
     );
