@@ -105,7 +105,7 @@ function SignIn(props) {
                     email: userInfo.email,
                     name: userInfo.name,
                     phoneNumber: userInfo.phoneNumber,
-                    uid: res.uid,
+                    uid: res.user.uid,
                 }
                 if(remember){
                     localStorage.setItem('user', JSON.stringify(user));

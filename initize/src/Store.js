@@ -15,6 +15,9 @@ function reducer(state, action) {
         case 'SIGNUP':
             const {email, phoneNumber, name, uid} = action.payload;
             return {...state,loggedIn:true, email : email, name: name, phoneNumber: phoneNumber, uid:uid}
+        case 'LOGIN':
+            // const {email, phoneNumber, uid} = action.payload;
+            return{...state, loggedIn:true, email: action.payload.email, phoneNumber: action.payload.phoneNumber, uid: action.payload.uid};
         default:
             return state;
     }

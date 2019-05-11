@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -12,6 +11,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import * as firebase from "firebase/app"; 
+import {Store} from '../Store';
+import { withRouter } from 'react-router-dom';
 
 const styles = theme => ({
     main: {
@@ -39,45 +41,109 @@ const styles = theme => ({
     submit: {
         marginTop: theme.spacing.unit * 3,
     },
+    span:{
+        color:"blue",
+        cursor:"pointer",
+        '&:hover':{
+            color:"darkblue",
+            textDecoration:"underline"
+        }
+    }
 });
 
 function Login(props) {
     const { classes } = props;
+    const {dispatch} = React.useContext(Store);
+
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState({password1:""});
+    const [errorMessage, setErrorMessage] = React.useState("");
+    const [remember, setRemember] = React.useState(false);
+
+    const handlePassword = e => {
+        setPassword(e.target.value)
+    }
+
+    const handleChange = e => {
+        setEmail(e.target.value);
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        if(!email || !password){
+            if(!email){
+                setErrorMessage("Please input an email")
+            }
+            else if(!password){
+                setErrorMessage("Please input password")
+            }
+            return;
+        }else{
+            firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(res => {
+                console.log(res);
+                const user = {
+                    email: res.user.email,
+                    phoneNumber: res.user.phoneNumber,
+                    uid: res.user.uid
+                }
+                if(remember){
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+                dispatch({type:"LOGIN", payload:user});
+                console.log("REDIRECTING")
+                props.history.push('/dashboard')
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+        }
+    }
 
     return (
         <main className={classes.main}>
-        <CssBaseline />
-        <Paper className={classes.paper}>
-            <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-            Log in
-            </Typography>
-            <form className={classes.form}>
-            <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="email">Email Address</InputLabel>
-                <Input id="email" name="email" autoComplete="email" autoFocus />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-                <InputLabel htmlFor="password">Password</InputLabel>
-                <Input name="password" type="password" id="password" autoComplete="current-password" />
-            </FormControl>
-            <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-            />
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-            >
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
                 Login
-            </Button>
-            </form>
-        </Paper>
+                </Typography>
+
+                <Typography component="h1" variant="h5">
+                {errorMessage}
+                </Typography>
+                <form onSubmit={handleSubmit} className={classes.form}>
+
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="email">Email Address</InputLabel>
+                        <Input onChange={handleChange} id="email" name="email" autoComplete="email" autoFocus />
+                    </FormControl>
+
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <Input onChange={handlePassword} name="password1" type="password" id="password1" />
+                    </FormControl>
+
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Remember me"
+                        onChange={()=>setRemember(!remember)}
+                    />
+
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={handleSubmit}
+                    >
+                        Login
+                    </Button>
+                </form>
+                <p>Don't have an account? Sign up <span className={classes.span} onClick={()=>props.history.push('/sign-up')}>here</span></p>
+            </Paper>
         </main>
     );
 }
@@ -86,4 +152,6 @@ Login.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Login);
+const ws = withStyles(styles)(Login)
+
+export default withRouter(ws)
