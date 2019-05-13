@@ -15,6 +15,7 @@ import * as firebase from "firebase/app";
 import {Store} from '../Store';
 import { Redirect, withRouter } from 'react-router-dom';
 import {connect} from 'react-redux';
+import {handleSignup} from '../actions/index';
 
 const styles = theme => ({
     main: {
@@ -54,8 +55,6 @@ const styles = theme => ({
 
 function SignIn(props) {
     const { classes } = props;
-    const {dispatch} = React.useContext(Store);
-
     const [userInfo, setUserInfo] = React.useState({email:"", name:"", phoneNumber:""});
     const [password, setPassword] = React.useState({password1:"", password2:""});
     const [errorMessage, setErrorMessage] = React.useState("");
@@ -113,7 +112,7 @@ function SignIn(props) {
                 if(remember){
                     localStorage.setItem('user', JSON.stringify(user));
                 }
-                dispatch({type:"SIGNUP", payload:user});
+                props.handleSignup(user)
                 firebase.firestore().collection('users').doc(user.uid).set(user).then(res=>{
                     console.log("added user to firestore")
                 })
@@ -199,6 +198,20 @@ SignIn.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
+const mapStateToProps = state => {
+    console.log("MAP STATE TO PROPS : ",state);
+    return {
+        loggedIn: state.loggedIn,
+        email: state.email,
+        name: state.name,
+        phoneNumber: state.phoneNumber,
+        uid: state.uid,
+        profilePicture: state.profilePicture,
+    };
+};
+
 const ws = withStyles(styles)(SignIn)
 
-export default withRouter(ws)
+// export default withRouter(ws)
+
+export default connect(mapStateToProps, {handleSignup})(withRouter(ws));

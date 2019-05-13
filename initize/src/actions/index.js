@@ -8,3 +8,7 @@ export const LOGIN = "LOGIN"
 export const handleLogin = (payload) => dispatch => {
   dispatch({type: LOGIN, payload:payload})
 }
+
+export const handleSignup = (payload) => dispatch => {
+  dispatch({type: SIGNUP, payload:payload})
+} 
