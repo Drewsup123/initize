@@ -14,6 +14,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import * as firebase from "firebase/app"; 
 import {Store} from '../Store';
 import { Redirect, withRouter } from 'react-router-dom';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
     main: {
@@ -106,15 +107,26 @@ function SignIn(props) {
                     name: userInfo.name,
                     phoneNumber: userInfo.phoneNumber,
                     uid: res.user.uid,
+                    dateJoined: Date.now(),
+                    profileImg:"",
                 }
                 if(remember){
                     localStorage.setItem('user', JSON.stringify(user));
                 }
                 dispatch({type:"SIGNUP", payload:user});
+                firebase.firestore().collection('users').doc(user.uid).set(user).then(res=>{
+                    console.log("added user to firestore")
+                })
+                .catch(err => {
+                    console.log(err)
+                    alert("Sorry there was an error adding your user")
+                    return;
+                })
                 console.log("REDIRECTING")
                 props.history.push('/dashboard')
             })
             .catch(error => {
+                console.log(error);
                 alert("Sorry there was an error adding your user");
             });
         }

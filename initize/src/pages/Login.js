@@ -11,9 +11,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import * as firebase from "firebase/app"; 
-import {Store} from '../Store';
 import { withRouter } from 'react-router-dom';
+import {handleLogin} from '../actions/index';
+import {connect} from 'react-redux';
+import * as firebase from 'firebase/app'
 
 const styles = theme => ({
     main: {
@@ -53,8 +54,6 @@ const styles = theme => ({
 
 function Login(props) {
     const { classes } = props;
-    const {dispatch} = React.useContext(Store);
-
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState({password1:""});
     const [errorMessage, setErrorMessage] = React.useState("");
@@ -79,24 +78,25 @@ function Login(props) {
             }
             return;
         }else{
-            firebase.auth().signInWithEmailAndPassword(email, password)
+            firebase.auth()
+            .signInWithEmailAndPassword(email, password)
             .then(res => {
-                console.log(res);
-                const user = {
-                    email: res.user.email,
-                    phoneNumber: res.user.phoneNumber,
-                    uid: res.user.uid
-                }
-                if(remember){
-                    localStorage.setItem('user', JSON.stringify(user));
-                }
-                dispatch({type:"LOGIN", payload:user});
-                console.log("REDIRECTING")
-                props.history.push('/dashboard')
-            })
-            .catch(error => {
-                alert(error.message);
-            });
+                    console.log(res);
+                    const user = {
+                        email: res.user.email,
+                        phoneNumber: res.user.phoneNumber,
+                        uid: res.user.uid
+                    }
+                    if(remember){
+                        localStorage.setItem('user', JSON.stringify(user));
+                    }
+                    props.handleLogin(user);
+                    props.history.push('/dashboard')
+                })
+                .catch(error => {
+                    alert(error.message);
+                    }
+                );
         }
     }
 
@@ -152,6 +152,21 @@ Login.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
+const mapStateToProps = state => {
+    console.log("MAP STATE TO PROPS : ",state);
+    return {
+        loggedIn: state.loggedIn,
+        email: state.email,
+        name: state.name,
+        phoneNumber: state.phoneNumber,
+        uid: state.uid,
+        profilePicture: state.profilePicture,
+    };
+};
+
 const ws = withStyles(styles)(Login)
 
-export default withRouter(ws)
+export default connect(
+    mapStateToProps,
+    {handleLogin}
+)(withRouter(ws));
