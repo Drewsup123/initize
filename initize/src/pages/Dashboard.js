@@ -14,6 +14,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import * as firebase from "firebase/app";
 import {connect} from 'react-redux';
 import {addBoard} from '../actions/index';
+import {withRouter} from 'react-router-dom';
 
 class Dashboard extends React.Component{
     constructor(){
@@ -81,6 +82,11 @@ class Dashboard extends React.Component{
         this.props.addBoard(final);
     }
 
+    componentDidMount = () => {
+        this.props.loggedIn ? this.getUsersBoards() : this.props.history.push('/login') ;
+        setTimeout(()=>{this.forceUpdate()},1000)
+    }
+
     render(){
         return(
             <div>
@@ -96,7 +102,7 @@ class Dashboard extends React.Component{
                     CREATE
                 </Fab>
 
-                <Board boardImg="https://s26552.pcdn.co/wp-content/uploads/2018/03/dc_neighborhood_news-13.jpg" boardTitle="Duck Team" />
+                {this.props.boards.length ? this.props.boards.map(board => <Board id={board.id} boardTitle={board.name} />) : null}
 
                 {/* DIALOG */}
                 <Dialog
@@ -145,4 +151,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps,{addBoard})(Dashboard);
+export default connect(mapStateToProps,{addBoard})(withRouter(Dashboard));

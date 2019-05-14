@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import {Link} from 'react-router-dom';
 
 
 const styles = props => ({
@@ -10,6 +11,7 @@ const styles = props => ({
         display:"flex",
         justifyContent:"center",
         alignItems:"center",
+        background:"red",
     },
     boardTitle:{
         textAlign:"center",
@@ -24,9 +26,11 @@ const styles = props => ({
 function Board(props){
     const { classes } = props;
     return(
-        <div className={classes.boardContainer} style={{background:`url(${props.boardImg})`, backgroundRepeat:"no-repeat", backgroundSize:"cover"}}>
-            <h4 className={classes.boardTitle}>{props.boardTitle}</h4>
-        </div>
+        <Link to={`/board/${props.id}`}>
+            <div className={classes.boardContainer}>
+                <h4 className={classes.boardTitle}>{props.boardTitle}</h4>
+            </div>
+        </Link>
     );
 }
 
