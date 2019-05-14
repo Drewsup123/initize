@@ -12,12 +12,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import * as firebase from "firebase/app";
+import {connect} from 'react-redux';
+import {addBoard} from '../actions/index';
 
 class Dashboard extends React.Component{
     constructor(){
         super();
         this.state = {
-            open: true,
+            open: false,
             creatingBoard: false,
             boardName: "",
         }
@@ -31,28 +33,62 @@ class Dashboard extends React.Component{
         this.setState({open: true});
     }
 
+    handleChange = e => {
+        this.setState({boardName: e.target.value})
+    }
+
     createGroup = e => {
         e.preventDefault();
         console.log("clicked")
-        // this.setState({creatingBoard: true});
-        // const boardRef = firebase.database().ref('boards');
-        // const key = boardRef.push().key;
-        // const newBoard = {
-        //     id: key,
-        //     name: this.state.boardName,
-        //     createdAt: Date.now(),
-        //     users: [],
-        //     owner: state.owner
-        // }
+        this.setState({creatingBoard: true});
+        const boardRef = firebase.database().ref('boards');
+        const key = boardRef.push().key;
+        const newBoard = {
+            id: key,
+            name: this.state.boardName,
+            createdAt: Date.now(),
+            users: [this.props.uid],
+            owner:{
+                name: this.props.name,
+                profilePicture: this.props.profilePicture,
+                email:this.props.email,
+            }
+        }
+        boardRef.child(key)
+        .update(newBoard)
+        .then(() => {
+            this.setState({creatingBoard: false});
+            this.handleClose();
+        })
+        .catch(err => {
+            alert("Sorry there was an error creating your board");
+            console.log(err)
+        })
+    }
+
+    getUsersBoards = () => {
+        let final = [];
+        this.props.boardsId.forEach(board => {
+            console.log("id", board)
+            firebase.database().ref("/boards/" + board).once('value').then(snap => {
+                console.log("SNAPSHOTVAL", snap.val())
+                final.push(snap.val());
+            })
+            .catch(err=>{
+                alert("There was an error recieving your boards :(", err.message)
+            })
+        })
+        this.props.addBoard(final);
     }
 
     render(){
         return(
             <div>
                 <Navbar/>
-                <h1>Boards</h1>
+                <h1>{this.props.name}'s Boards</h1>
+                {this.props.loggedIn ? <h1>Signed in</h1> : <h1>Signed out</h1>}
 
-                <Fab onClick={this.handleOpen} color="primary" aria-label="Add" size="medium">
+                <Fab onClick={this.getUsersBoards} color="primary" aria-label="Add" size="medium">
                         JOIN
                     </Fab>
 
@@ -76,6 +112,7 @@ class Dashboard extends React.Component{
                         label="Board Name"
                         fullWidth
                         disabled={this.state.creatingBoard}
+                        onChange={this.handleChange}
                         />
                     </DialogContent>
 
@@ -94,4 +131,18 @@ class Dashboard extends React.Component{
     }
 }
 
-export default Dashboard;
+const mapStateToProps = state => {
+    console.log("MAP STATE TO PROPS : ",state);
+    return {
+        loggedIn: state.loggedIn,
+        email: state.email,
+        name: state.name,
+        phoneNumber: state.phoneNumber,
+        uid: state.uid,
+        profilePicture: state.profilePicture,
+        boardsId: state.boardsId,
+        boards: state.boards,
+    };
+};
+
+export default connect(mapStateToProps,{addBoard})(Dashboard);

@@ -3,7 +3,8 @@
   Be sure to export each action type so you can pull it into your reducer
 */
 export const SIGNUP = "SIGNUP";
-export const LOGIN = "LOGIN"
+export const LOGIN = "LOGIN";
+export const ADDBOARD = "ADD_BOARD";
 
 export const handleLogin = (payload) => dispatch => {
   dispatch({type: LOGIN, payload:payload})
@@ -12,3 +13,7 @@ export const handleLogin = (payload) => dispatch => {
 export const handleSignup = (payload) => dispatch => {
   dispatch({type: SIGNUP, payload:payload})
 } 
+
+export const addBoard = payload => dispatch => {
+  dispatch({type:ADDBOARD, payload:payload})
+}

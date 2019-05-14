@@ -82,16 +82,18 @@ function Login(props) {
             .signInWithEmailAndPassword(email, password)
             .then(res => {
                     console.log(res);
-                    const user = {
-                        email: res.user.email,
-                        phoneNumber: res.user.phoneNumber,
-                        uid: res.user.uid
-                    }
-                    if(remember){
-                        localStorage.setItem('user', JSON.stringify(user));
-                    }
-                    props.handleLogin(user);
-                    props.history.push('/dashboard')
+                    firebase.firestore().collection('users').doc(res.user.uid).get().then(docSnap => {
+                        console.log(docSnap.data());
+                        const user = docSnap.data();
+                        if(remember){
+                            localStorage.setItem('user', JSON.stringify(user));
+                        }
+                        props.handleLogin(user);
+                        props.history.push('/dashboard')
+                    })
+                    .catch(err => {
+                        alert("Error logging you in \n", err.message)
+                    })
                 })
                 .catch(error => {
                     alert(error.message);

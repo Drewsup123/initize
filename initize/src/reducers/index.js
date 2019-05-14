@@ -2,7 +2,8 @@
 import
 {
     LOGIN,
-    SIGNUP
+    SIGNUP,
+    ADDBOARD,
 }from '../actions/index';
 
 const initialState = {
@@ -12,6 +13,9 @@ const initialState = {
     phoneNumber:"",
     uid:"",
     profilePicture:"",
+    dateJoined: "",
+    boardsId:["-LesEutuPhMv78yqrln1"],
+    boards:[]
 }
 
 export const reducer = (state = initialState, action) => {
@@ -35,9 +39,15 @@ export const reducer = (state = initialState, action) => {
                 loggedIn:true, 
                 email: action.payload.email, 
                 phoneNumber: action.payload.phoneNumber, 
-                uid: action.payload.uid
+                uid: action.payload.uid,
+                name: action.payload.name,
+                dateJoined: action.payload.dateJoined,
+                profilePicture: action.payload.profileImg,
+                boards:action.payload.boards
             };
             
+        case ADDBOARD:
+            return{...state, boards: action.payload};
         default:
             return state;
     }
