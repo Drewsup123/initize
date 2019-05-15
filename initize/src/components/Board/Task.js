@@ -4,20 +4,21 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
 const Task = SortableElement(({value}) => {
+    console.log("this is the value", value)
     return(
     <TableRow>
         {/* Task Name */}
-        <TableCell>{value}</TableCell>
+        <TableCell>{value.task}</TableCell>
         {/* Priority */}
-        <TableCell>{value}</TableCell>
+        <TableCell>{value.priority}</TableCell>
         {/* User */}
-        <TableCell>{value}</TableCell>
+        <TableCell>User</TableCell>
         {/* Status */}
-        <TableCell>{value}</TableCell>
+        <TableCell>{value.status}</TableCell>
         {/* Description */}
-        <TableCell>{value}</TableCell>
+        <TableCell>{value.description}</TableCell>
         {/* Notes */}
-        <TableCell>{value}</TableCell>
+        <TableCell>{value.notes}</TableCell>
     </TableRow>
     )
 });

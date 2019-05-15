@@ -21,7 +21,7 @@ class Board extends React.Component{
         super();
         this.state = {
             items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
-            open:true,
+            open:false,
             newTask:{
                 task:"",
                 priority:"",
@@ -29,14 +29,25 @@ class Board extends React.Component{
                 status:"",
                 description:"",
                 notes:"",
-            }
+            },
+            checkedCritical: false,
+            checkedImportant: false,
+            checkedNormal: false,
+            checkedLow: false,
+            tasks:[],
+            boardName:"",
+            boardOwner:"",
+            createdAt:"",
         };
     }
 
     onSortEnd = ({oldIndex, newIndex}) => {
-        this.setState(({items}) => ({
-            items: arrayMove(items, oldIndex, newIndex),
-        }));
+        // Terrible lol
+        const temp = this.state.tasks[oldIndex];
+        let tasksCopy = this.state.tasks;
+        tasksCopy[oldIndex] = tasksCopy[newIndex];
+        tasksCopy[newIndex] = temp;
+        this.setState({tasks: tasksCopy})
     };
 
     handleClose = () => {
@@ -47,12 +58,21 @@ class Board extends React.Component{
         this.setState({open: true});
     }
 
-    GetBoardTasks = () => {
-        firebase.database().ref('boards').child(this.props.match.params)
+    GetBoard = () => {
+        firebase.database().ref('/boards/'+ this.props.match.params.id).once('value').then(snap => {
+            const board = snap.val();
+            this.setState({boardName:board.name, boardOwner: board.owner, createdAt: board.createdAt, tasks: board.tasks})
+        })
     }
 
     addTask = e => {
-
+        firebase.database().ref('/boards/'+this.props.match.params.id)
+        .child('tasks').push(this.state.newTask).then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
     handleChange = e => {
@@ -60,12 +80,22 @@ class Board extends React.Component{
         console.log(this.state.newTask);
     }
 
+    checkboxChangeHandler = e => {
+        this.setState({ [e.target.value]: e.target.checked });
+        this.setState({newTask:{...this.state.newTask, priority:e.target.name}})
+    }
+
+    componentDidMount(){
+        this.GetBoard();
+        console.log(this.state)
+    }
     render(){
         return(
             <div>
                 <h1>Board page</h1>
                 <button onClick={this.handleOpen}>add a task</button>
-                <SortableDiv items={this.state.items} onSortEnd={this.onSortEnd} />
+                <button onClick={this.GetBoard}>Get Snap</button>
+                <SortableDiv items={this.state.tasks} onSortEnd={this.onSortEnd} />
 
                 {/* DIALOG */}
                 <Dialog
@@ -84,29 +114,38 @@ class Board extends React.Component{
                         name="task"
                         onChange={this.handleChange}
                         />
+                        {/* Checkboxes */}
                         <div>
                             <h3>Priority</h3>
                             <Checkbox
-                                checked={true}
-                                value="checkedA"
+                                checked={this.state.checkedCritical}
+                                value="checkedCritical"
+                                name="critical"
+                                onChange={this.checkboxChangeHandler}
                             />Critical
                             <Checkbox
-                                checked={true}
-                                value="checkedB"
+                                checked={this.state.checkedImportant}
+                                value="checkedImportant"
+                                name="important"
                                 color="primary"
+                                onChange={this.checkboxChangeHandler}
                             />Important
                             <Checkbox
-                                checked={true}
-                                value="checkedB"
+                                checked={this.state.checkedNormal}
+                                value="checkedNormal"
+                                name="normal"
                                 color="primary"
+                                onChange={this.checkboxChangeHandler}
                             />Normal
                             <Checkbox
-                                checked={true}
-                                value="checkedB"
+                                checked={this.state.checkedLow}
+                                value="checkedLow"
+                                name="low"
                                 color="primary"
+                                onChange={this.checkboxChangeHandler}
                             />Low
                         </div>
-
+                        {/* User Assignment */}
                         <FormControl >
                             <InputLabel htmlFor="demo-controlled-open-select">Assign User</InputLabel>
                             <Select
@@ -123,7 +162,7 @@ class Board extends React.Component{
                                 <MenuItem value={30}>bob billy jr</MenuItem>
                             </Select>
                         </FormControl>
-
+                        {/* Description */}
                         <TextField
                         autoFocus
                         margin="dense"
@@ -133,7 +172,7 @@ class Board extends React.Component{
                         name="description"
                         onChange={this.handleChange}
                         />
-
+                        {/* Notes */}
                         <TextField
                         autoFocus
                         margin="dense"
@@ -149,8 +188,8 @@ class Board extends React.Component{
                         <Button disabled={this.state.creatingBoard} onClick={this.handleClose} color="primary">
                         Cancel
                         </Button>
-                        <Button onClick={this.createGroup} disabled={this.state.creatingBoard} color="primary">
-                        Create
+                        <Button onClick={this.addTask} disabled={this.state.creatingBoard} color="primary">
+                        Add Task
                         </Button>
                     </DialogActions>
                 </Dialog>

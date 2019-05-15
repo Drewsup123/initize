@@ -53,7 +53,8 @@ class Dashboard extends React.Component{
                 name: this.props.name,
                 profilePicture: this.props.profilePicture,
                 email:this.props.email,
-            }
+            },
+            tasks:[{taskTitle:"first task", priority: "critical", user:"none", status:"in progress"}],
         }
         boardRef.child(key)
         .update(newBoard)
