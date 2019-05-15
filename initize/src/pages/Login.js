@@ -88,6 +88,7 @@ function Login(props) {
                         if(remember){
                             localStorage.setItem('user', JSON.stringify(user));
                         }
+                        console.log("USER", docSnap.data())
                         props.handleLogin(user);
                         props.history.push('/dashboard')
                     })

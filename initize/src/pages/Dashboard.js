@@ -13,7 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import * as firebase from "firebase/app";
 import {connect} from 'react-redux';
-import {addBoard} from '../actions/index';
+import {addBoard, addBoardId} from '../actions/index';
 import {withRouter} from 'react-router-dom';
 
 class Dashboard extends React.Component{
@@ -58,8 +58,19 @@ class Dashboard extends React.Component{
         boardRef.child(key)
         .update(newBoard)
         .then(() => {
-            this.setState({creatingBoard: false});
-            this.handleClose();
+            firebase.firestore().collection('users').doc(this.props.uid).update({
+                boards: firebase.firestore.FieldValue.arrayUnion(key)
+            }).then(()=>{
+                this.props.addBoardId(key)
+                this.setState({creatingBoard: false});
+                this.handleClose();
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Error creating board", err.message)
+                this.setState({creatingBoard: false});
+                this.handleClose();
+            })
         })
         .catch(err => {
             alert("Sorry there was an error creating your board");
@@ -102,7 +113,7 @@ class Dashboard extends React.Component{
                     CREATE
                 </Fab>
 
-                {this.props.boards.length ? this.props.boards.map(board => <Board id={board.id} boardTitle={board.name} />) : null}
+                {this.props.boards ? this.props.boards.map(board => <Board id={board.id} boardTitle={board.name} />) : null}
 
                 {/* DIALOG */}
                 <Dialog
@@ -151,4 +162,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps,{addBoard})(withRouter(Dashboard));
+export default connect(mapStateToProps,{addBoard, addBoardId})(withRouter(Dashboard));

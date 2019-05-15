@@ -8,6 +8,7 @@ import Messages from './pages/Messages';
 import Account from './pages/Account';
 import { Route } from 'react-router-dom';
 import {connect} from 'react-redux';
+import Board from './pages/Board';
 // Redirect, withRouter
 
 function App(props) {
@@ -20,6 +21,7 @@ function App(props) {
         <Route path="/dashboard" render={()=><Dashboard />} />
         <Route path="/messages" render={()=><Messages />} />
         <Route path="/Account" render={()=><Account />} />
+        <Route path="/board/:id" render={(props)=><Board {...props}/>} />
     </div>
   )
 }

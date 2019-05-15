@@ -4,6 +4,7 @@ import
     LOGIN,
     SIGNUP,
     ADDBOARD,
+    ADDBOARDID,
 }from '../actions/index';
 
 const initialState = {
@@ -14,7 +15,7 @@ const initialState = {
     uid:"",
     profilePicture:"",
     dateJoined: "",
-    boardsId:["-LesEutuPhMv78yqrln1"],
+    boardsId:[],
     boards:[]
 }
 
@@ -43,11 +44,14 @@ export const reducer = (state = initialState, action) => {
                 name: action.payload.name,
                 dateJoined: action.payload.dateJoined,
                 profilePicture: action.payload.profileImg,
-                boards:action.payload.boards
+                boards:action.payload.boards,
+                boardsId: action.payload.boards
             };
             
         case ADDBOARD:
             return{...state, boards: action.payload};
+        case ADDBOARDID:
+            return{...state, boardsId: state.boardsId.push(action.payload)}
         default:
             return state;
     }
