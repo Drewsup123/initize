@@ -6,11 +6,17 @@ import TableRow from '@material-ui/core/TableRow';
 const Task = SortableElement(({value}) => {
     return(
     <TableRow>
+        {/* Task Name */}
         <TableCell>{value}</TableCell>
+        {/* Priority */}
         <TableCell>{value}</TableCell>
+        {/* User */}
         <TableCell>{value}</TableCell>
+        {/* Status */}
         <TableCell>{value}</TableCell>
+        {/* Description */}
         <TableCell>{value}</TableCell>
+        {/* Notes */}
         <TableCell>{value}</TableCell>
     </TableRow>
     )

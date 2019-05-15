@@ -30,6 +30,26 @@ users : [array of user id's or objects]
 numOfUsers : number
 mods : [user ids of mods]
 groupType: "free", "deluxe", "premium"
+board: [
+    {
+        task:"string",
+        priority:"",
+        user:{userobject, or none},
+        status:"",
+        description:"",
+        notes:"",
+        //optional :
+        position: number (keep sorting along all devices)
+    },
+    {
+        task:"string",
+        priority:"",
+        user:{userobject, or none},
+        status:"",
+        description:"",
+        notes:"",
+    }
+]
 
 #schema for private chats
 userId
