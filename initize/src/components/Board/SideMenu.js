@@ -12,7 +12,9 @@ function SideMenu(props){
             <h6>Created on: {getDate(props.createdAt)}</h6>
             {props.boardOwner.uid === props.uid ? <button>Edit Settings/Upgrade</button> : null}
             <hr />
-            <h2>Members {props.boardOwner.uid === props.uid ? <button>+</button> : null}</h2>
+            <button>Board Room/Chat</button>
+            <hr />
+            <h2>Members({props.users.length}) {props.boardOwner.uid === props.uid ? <button>+</button> : null}</h2>
             {props.users ? props.users.map(user => <div>{user.name} <button>Start Chat</button></div>):<h3>Loading...</h3>}
         </div>
     )

@@ -47,11 +47,16 @@
     width:10%;
     padding:10px;
     border-right: 1px solid black;
-    position: fixed;
+    height:100vh;
 }
 
 .task-board{
     width:89%;
     height:100vh;
-    margin-left:11%;
+}
+
+.task-input{
+    border:none;
+    height: 50px;
+    width:100%;
 }

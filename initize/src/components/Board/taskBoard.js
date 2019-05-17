@@ -4,17 +4,14 @@ import {arrayMove} from 'react-sortable-hoc';
 import SortableDiv from './SortableDiv';
 import * as firebase from "firebase/app";
 import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Checkbox from '@material-ui/core/Checkbox';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -147,12 +144,8 @@ class TaskBoard extends React.Component{
     render(){
         return(
             <div className="task-board">
-                {/* <h1>{this.state.boardName}</h1>
-                <h4>Owned by: {this.state.boardOwner.name}</h4>
-                <p>createdAt: {this.state.createdAt}</p> */}
-                <button onClick={this.handleOpen}>add a task</button>
-                <button onClick={this.GetBoard}>Get Snap</button>
-                <SortableDiv url={this.props.match.params.id} shouldCancelStart={this.shouldCancelStart} items={this.state.tasks} onSortEnd={this.onSortEnd} lockAxis="y"/>
+                <Fab onClick={this.handleOpen} size="small" color="primary"><AddIcon/></Fab>Add Task
+                <SortableDiv url={this.props.match.params.id} shouldCancelStart={this.shouldCancelStart} items={this.state.tasks} onSortEnd={this.onSortEnd} lockAxis="y" lockToContainerEdges={true}/>
 
                 {/* DIALOG */}
                 <Dialog

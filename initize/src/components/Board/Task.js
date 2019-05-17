@@ -7,42 +7,54 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as firebase from "firebase/app";
 import {withRouter} from 'react-router-dom';
+import Fab from '@material-ui/core/Fab';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import Avatar from '@material-ui/core/Avatar';
 
 const Task = SortableElement(({value, url, index}) => {
     // console.log("this is the value", value)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [anchorEl2, setAnchorEl2] = React.useState(null);
+    const [edits, setEdits] = React.useState(
+            {
+                task: value.task, 
+                description: value.description,
+                notes: value.notes,
+            }
+        )
+    let defaultStyle = {width:"100%", height:"50px", border:"none", cursor:"pointer", fontWeight:"bold", fontSize:"14px"};
 
     const priorityLevelStyling = p => {
         if(p === "important"){
-            return{background:"yellow"};
+            return{...defaultStyle, background:"yellow"};
         }
         if(p === "critical"){
-            return{background:"red"};
+            return{...defaultStyle, background:"red"};
         }
         if(p === "normal"){
-            return {background: "lightblue"};
+            return {...defaultStyle, background: "lightblue"};
         }
         else{
-            return{background: "green"}
+            return{...defaultStyle, background: "green"}
         }
     }
 
     const statusStyling = s => {
         if(s === "In Progress"){
-            return {background: "yellow"};
+            return {...defaultStyle, background: "yellow"};
         }
         if(s === "done"){
-            return {background: "green"}
+            return {...defaultStyle, background: "green"}
         }
         if(s === "Needs Work"){
-            return {background: "lightgreen"}
+            return {...defaultStyle, background: "lightgreen"}
         }
         if(s === "Not Started"){
-            return {background: "#dd5216"}
+            return {...defaultStyle, background: "#dd5216"}
         }
         else{
-            return {background:"lightblue"}
+            return {...defaultStyle, background:"lightblue"}
         }
     }
 
@@ -73,65 +85,99 @@ const Task = SortableElement(({value, url, index}) => {
         setAnchorEl2(null);
     }
 
+    const onChangeHandler = e => {
+        setEdits({...edits, [e.target.name] : e.target.value});
+    }
+
+    const onSubmitEdits = e => {
+        if(edits === value){
+            return;
+        }else{
+            firebase.database().ref(`/boards/${url}/tasks/${index}`).update({
+                task: edits.task,
+                description: edits.description,
+                notes: edits.notes,
+            }).then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                alert("error updating task");
+                console.log(err);
+            })
+        }
+    }
+
+    const onDeleteTask = e => {
+        e.preventDefault();
+        firebase.database().ref(`/boards/${url}/tasks`).child(index).remove().then(() => {
+            alert("deleted task")
+        })
+        .catch(err => {
+            console.log(err);
+            alert(err.message)
+        })
+    }
+
     return(
-    <TableRow>
-        {/* Task Name */}
-        <TableCell>{value.task}</TableCell>
-        {/* Priority */}
-        <TableCell 
-            style={priorityLevelStyling(value.priority)}
-        >
-            <button
-            aria-owns={anchorEl ? 'simple-menu' : undefined}
-            aria-haspopup="true"
-            onClick={event=>setAnchorEl(event.currentTarget)}
-            name="button"
-            >
-            {value.priority}
-            </button>
-            <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={()=>setAnchorEl(null)}
-            >
-                <MenuItem onClick={()=>changePriority('critical')}>critical</MenuItem>
-                <MenuItem onClick={()=>changePriority('important')}>important</MenuItem>
-                <MenuItem onClick={()=>changePriority('normal')}>normal</MenuItem>
-                <MenuItem onClick={()=>changePriority('low')}>low</MenuItem>
-            </Menu>
-        </TableCell>
-        {/* User */}
-        <TableCell>{value.user ? value.user.name : "user"}</TableCell>
-        {/* Status */}
-        <TableCell 
-            style={statusStyling(value.status)}>
-            <button
-            aria-owns={anchorEl2 ? 'simple-menu' : undefined}
-            aria-haspopup="true"
-            onClick={event=>setAnchorEl2(event.currentTarget)}
-            name="button"
-            >
-            {value.status}
-            </button>
-            <Menu
-            id="simple-menu"
-            anchorEl={anchorEl2}
-            open={Boolean(anchorEl2)}
-            onClose={()=>setAnchorEl2(null)}
-            >
-                <MenuItem onClick={()=>changeStatus('done')}>Done</MenuItem>
-                <MenuItem onClick={()=>changeStatus('In Progress')}>In Progress</MenuItem>
-                <MenuItem onClick={()=>changeStatus('Needs Work')}>Needs Work</MenuItem>
-                <MenuItem onClick={()=>changeStatus('Not Started')}>Not Started</MenuItem>
-            </Menu>
-        </TableCell>
-        {/* Description */}
-        <TableCell>{value.description}</TableCell>
-        {/* Notes */}
-        <TableCell>{value.notes}</TableCell>
-        {/* <button onClick={()=>alert("hello world")}>Edit</button> */}
-    </TableRow>
+            <TableRow>
+                {/* Task Name */}
+                <TableCell><input onChange={onChangeHandler} onKeyDown={e => e.keyCode === 13?onSubmitEdits():null} name="task" className="task-input" type="text" value={edits.task} /></TableCell>
+                {/* Priority */}
+                <TableCell>
+                    <button
+                    aria-owns={anchorEl ? 'simple-menu' : undefined}
+                    aria-haspopup="true"
+                    onClick={event=>setAnchorEl(event.currentTarget)}
+                    name="button"
+                    style={priorityLevelStyling(value.priority)}
+                    >
+                    {value.priority}
+                    </button>
+                    <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={()=>setAnchorEl(null)}
+                    >
+                        <MenuItem onClick={()=>changePriority('critical')}>critical</MenuItem>
+                        <MenuItem onClick={()=>changePriority('important')}>important</MenuItem>
+                        <MenuItem onClick={()=>changePriority('normal')}>normal</MenuItem>
+                        <MenuItem onClick={()=>changePriority('low')}>low</MenuItem>
+                    </Menu>
+                </TableCell>
+                {/* User */}
+                <TableCell><Avatar src={value.user.profilePicture}/>{value.user ? value.user.name : "user"}</TableCell>
+                {/* Status */}
+                <TableCell>
+                    <button
+                    aria-owns={anchorEl2 ? 'simple-menu' : undefined}
+                    aria-haspopup="true"
+                    onClick={event=>setAnchorEl2(event.currentTarget)}
+                    name="button"
+                    style={statusStyling(value.status)}
+                    >
+                    {value.status}
+                    </button>
+                    <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl2}
+                    open={Boolean(anchorEl2)}
+                    onClose={()=>setAnchorEl2(null)}
+                    >
+                        <MenuItem onClick={()=>changeStatus('done')}>Done</MenuItem>
+                        <MenuItem onClick={()=>changeStatus('In Progress')}>In Progress</MenuItem>
+                        <MenuItem onClick={()=>changeStatus('Needs Work')}>Needs Work</MenuItem>
+                        <MenuItem onClick={()=>changeStatus('Not Started')}>Not Started</MenuItem>
+                    </Menu>
+                </TableCell>
+                {/* Description */}
+                <TableCell><input onChange={onChangeHandler} onKeyDown={e => e.keyCode === 13?onSubmitEdits():null} name="description" className="task-input" type="text" value={edits.description} /></TableCell>
+                {/* Notes */}
+                <TableCell><input onSubmit={onSubmitEdits} onChange={onChangeHandler} onKeyDown={e => e.keyCode === 13?onSubmitEdits():null} name="notes" className="task-input" type="text" value={edits.notes} /></TableCell>
+                <TableCell>
+                    <input type="button" style={{background:"none", border:"none", cursor:"pointer"}} onClick={onDeleteTask} value="delete"/>
+                </TableCell>
+            </TableRow>
     )
 });
 
