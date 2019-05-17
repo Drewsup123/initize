@@ -25,7 +25,6 @@ class TaskBoard extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
             open:false,
             newTask:{
                 task:"",
@@ -105,6 +104,14 @@ class TaskBoard extends React.Component{
         this.setState({newTask:{...this.state.newTask, priority : e.target.value}})
     }
 
+    radioHandleChangeUser = (name, uid, profilePicture) => {
+        this.setState({newTask: {
+            ...this.state.newTask, 
+            user: {name: name, uid: uid, profilePicture: profilePicture}
+        }})
+        console.log(this.state.newTask);
+    }
+
     componentDidMount(){
         this.GetBoard();
         console.log(this.state)
@@ -150,7 +157,6 @@ class TaskBoard extends React.Component{
                         value={this.state.newTask.task}
                         />
                         {/* Checkboxes */}
-                        {/* User Assignment */}
                         <FormControl component="fieldset">
                         <FormLabel component="legend">Priority Level</FormLabel>
                         <RadioGroup
@@ -165,19 +171,13 @@ class TaskBoard extends React.Component{
                             <FormControlLabel value="low" control={<Radio />} label="low" />
                         </RadioGroup>
                         </FormControl>
-                        {/* <FormControl>
-                            <InputLabel>{this.state.newTask.user.name ? this.state.newTask.user.name : "Choose a user"}</InputLabel>
-                            <Select
-                                value="test"
-                                onChange={this.newTaskChangeUser}
-                            >
-                                {this.state.users.map(user => (
-                                <MenuItem key={user.uid} value={user} >
-                                    {user.name}
-                                </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl> */}
+                        {/* User Assignment */}
+                        <h3>Users</h3>
+                        {this.state.users ? this.state.users.map(user => 
+                            <div onClick={()=>this.radioHandleChangeUser(user.name, user.uid, user.profilePicture)}>
+                                {this.state.newTask.user && this.state.newTask.user.uid === user.uid ? <h4 style={{color: 'red'}}>{user.name}</h4> : <h4>{user.name}</h4>}
+                            </div>
+                        ):null}
                         {/* Description */}
                         <TextField
                         autoFocus
