@@ -124,8 +124,24 @@ class TaskBoard extends React.Component{
         })
     }
 
+    changedTaskListener = () => {
+        firebase.database().ref('/boards/' + this.props.match.params.id +"/tasks/").on('child_changed', () => {
+            this.GetBoard();
+        })
+    }
+
     newTaskChangeUser = e => {
         this.setState({newTask : {user : e.target.value}})
+    }
+
+    shouldCancelStart(e) {
+        // Cancel sorting if the event target is an `input`, `textarea`, `select` or `option`
+        if (['input', 'textarea', 'select', 'option','button'].indexOf(e.target.tagName.toLowerCase()) !== -1) {
+            return true; // Return true to cancel sorting
+        }
+        if(e.target.name){
+            return true;
+        }
     }
 
     render(){
@@ -136,7 +152,7 @@ class TaskBoard extends React.Component{
                 <p>createdAt: {this.state.createdAt}</p>
                 <button onClick={this.handleOpen}>add a task</button>
                 <button onClick={this.GetBoard}>Get Snap</button>
-                <SortableDiv items={this.state.tasks} onSortEnd={this.onSortEnd} />
+                <SortableDiv url={this.props.match.params.id} shouldCancelStart={this.shouldCancelStart} items={this.state.tasks} onSortEnd={this.onSortEnd} />
 
                 {/* DIALOG */}
                 <Dialog
