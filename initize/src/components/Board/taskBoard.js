@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {arrayMove} from 'react-sortable-hoc';
-import SortableDiv from '../components/Board/SortableDiv';
+import SortableDiv from './SortableDiv';
 import * as firebase from "firebase/app";
 import Fab from '@material-ui/core/Fab';
 import Button from '@material-ui/core/Button';
@@ -15,10 +15,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Navbar from '../components/Global/Navbar';
-import TaskBoard from '../components/Board/taskBoard';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 
-class Board extends React.Component{
+class TaskBoard extends React.Component{
     constructor(props){
         super(props);
         this.state = {
@@ -36,10 +39,6 @@ class Board extends React.Component{
                 description:"",
                 notes:"",
             },
-            checkedCritical: false,
-            checkedImportant: false,
-            checkedNormal: false,
-            checkedLow: false,
             tasks:[],
             boardName:"",
             boardOwner:"",
@@ -102,9 +101,8 @@ class Board extends React.Component{
         console.log(this.state.newTask);
     }
 
-    checkboxChangeHandler = e => {
-        this.setState({ [e.target.value]: e.target.checked });
-        this.setState({newTask:{...this.state.newTask, priority:e.target.name}})
+    radioHandleChange = e => {
+        this.setState({newTask:{...this.state.newTask, priority : e.target.value}})
     }
 
     componentDidMount(){
@@ -126,17 +124,15 @@ class Board extends React.Component{
     render(){
         return(
             <div>
-                <Navbar />
-                <TaskBoard {...this.props}/>
-                {/* <h1>{this.state.boardName}</h1>
+                <h1>{this.state.boardName}</h1>
                 <h4>Owned by: {this.state.boardOwner.name}</h4>
                 <p>createdAt: {this.state.createdAt}</p>
                 <button onClick={this.handleOpen}>add a task</button>
                 <button onClick={this.GetBoard}>Get Snap</button>
-                <SortableDiv items={this.state.tasks} onSortEnd={this.onSortEnd} /> */}
+                <SortableDiv items={this.state.tasks} onSortEnd={this.onSortEnd} />
 
                 {/* DIALOG */}
-                {/* <Dialog
+                <Dialog
                 open={this.state.open}
                 onClose={this.handleClose}
                 aria-labelledby="form-dialog-title"
@@ -152,39 +148,23 @@ class Board extends React.Component{
                         name="task"
                         onChange={this.handleChange}
                         value={this.state.newTask.task}
-                        /> */}
+                        />
                         {/* Checkboxes */}
-                        {/* <div>
-                            <h3>Priority</h3>
-                            <Checkbox
-                                checked={this.state.checkedCritical}
-                                value="checkedCritical"
-                                name="critical"
-                                onChange={this.checkboxChangeHandler}
-                            />Critical
-                            <Checkbox
-                                checked={this.state.checkedImportant}
-                                value="checkedImportant"
-                                name="important"
-                                color="primary"
-                                onChange={this.checkboxChangeHandler}
-                            />Important
-                            <Checkbox
-                                checked={this.state.checkedNormal}
-                                value="checkedNormal"
-                                name="normal"
-                                color="primary"
-                                onChange={this.checkboxChangeHandler}
-                            />Normal
-                            <Checkbox
-                                checked={this.state.checkedLow}
-                                value="checkedLow"
-                                name="low"
-                                color="primary"
-                                onChange={this.checkboxChangeHandler}
-                            />Low
-                        </div> */}
                         {/* User Assignment */}
+                        <FormControl component="fieldset">
+                        <FormLabel component="legend">Priority Level</FormLabel>
+                        <RadioGroup
+                            aria-label="Gender"
+                            name="gender1"
+                            value={this.state.newTask.priority}
+                            onChange={this.radioHandleChange}
+                        >
+                            <FormControlLabel value="critical" control={<Radio />} label="critical" />
+                            <FormControlLabel value="important" control={<Radio />} label="important" />
+                            <FormControlLabel value="normal" control={<Radio />} label="normal" />
+                            <FormControlLabel value="low" control={<Radio />} label="low" />
+                        </RadioGroup>
+                        </FormControl>
                         {/* <FormControl>
                             <InputLabel>{this.state.newTask.user.name ? this.state.newTask.user.name : "Choose a user"}</InputLabel>
                             <Select
@@ -199,7 +179,7 @@ class Board extends React.Component{
                             </Select>
                         </FormControl> */}
                         {/* Description */}
-                        {/* <TextField
+                        <TextField
                         autoFocus
                         margin="dense"
                         label="Description"
@@ -207,9 +187,9 @@ class Board extends React.Component{
                         disabled={this.state.creatingBoard}
                         name="description"
                         onChange={this.handleChange}
-                        /> */}
+                        />
                         {/* Notes */}
-                        {/* <TextField
+                        <TextField
                         autoFocus
                         margin="dense"
                         label="Notes"
@@ -228,7 +208,7 @@ class Board extends React.Component{
                         Add Task
                         </Button>
                     </DialogActions>
-                </Dialog> */}
+                </Dialog>
                 {/* End DIALOG */}
             </div>
         )
@@ -252,4 +232,4 @@ const mapStateToProps = state => {
 
 export default connect(
     mapStateToProps
-)(Board);
+)(TaskBoard);

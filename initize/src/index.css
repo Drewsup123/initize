@@ -2,3 +2,38 @@
     width:100%;
     box-sizing:border-box;
 }
+
+/* Priority css */
+.important{
+    background:yellow !important;
+}
+
+.critical{
+    background:red;
+}
+
+.normal{
+    background:blue
+}
+
+.low{
+    background:green;
+}
+
+/* Status CSS */
+
+.done{
+    background:green;
+}
+
+.inprogress{
+    background:yellow
+}
+
+.needs-done{
+    background:red;
+}
+
+.selected{
+    border:1px solid black;
+}

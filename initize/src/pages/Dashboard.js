@@ -48,13 +48,14 @@ class Dashboard extends React.Component{
             id: key,
             name: this.state.boardName,
             createdAt: Date.now(),
-            users: [this.props.uid],
+            users: [{uid:this.props.uid, name:this.props.name, profilePicture:this.props.profilePicture}],
             owner:{
                 name: this.props.name,
                 profilePicture: this.props.profilePicture,
                 email:this.props.email,
+                uid: this.props.uid
             },
-            tasks:[{taskTitle:"first task", priority: "critical", user:"none", status:"in progress"}],
+            tasks:[],
         }
         boardRef.child(key)
         .update(newBoard)
@@ -64,6 +65,7 @@ class Dashboard extends React.Component{
             }).then(()=>{
                 this.props.addBoardId(key)
                 this.setState({creatingBoard: false});
+                this.getUsersBoards();
                 this.handleClose();
             })
             .catch(err => {
@@ -81,6 +83,9 @@ class Dashboard extends React.Component{
 
     getUsersBoards = () => {
         let final = [];
+        if(this.props.boardsId.length === 0){
+            return;
+        }
         this.props.boardsId.forEach(board => {
             console.log("id", board)
             firebase.database().ref("/boards/" + board).once('value').then(snap => {

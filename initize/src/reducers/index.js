@@ -9,15 +9,25 @@ import
 
 const initialState = {
     loggedIn: false,
-    email:"",
-    name:"",
+    email:"drewsup123c@gmail.com",
+    name:"Drew Johnson",
     phoneNumber:"",
-    uid:"",
+    uid:"kiMqIQGxg4Tu9UIbT1iyZypyCMb2",
     profilePicture:"",
-    dateJoined: "",
+    dateJoined: 1557950495292,
     boardsId:[],
     boards:[]
 }
+
+// boards: (3) ["-LexcGEPzvO7zbeyOBCv", "-LexlWjdVAlauxHOqlSN", "-LexlbwmYG2nyTlr_YpX"]
+// boardsId: (3) ["-LexcGEPzvO7zbeyOBCv", "-LexlWjdVAlauxHOqlSN", "-LexlbwmYG2nyTlr_YpX"]
+// dateJoined: 1557950495292
+// email: "drewsup123c@gmail.com"
+// loggedIn: true
+// name: "Drew Johnson"
+// phoneNumber: "4068502160"
+// profilePicture: ""
+// uid: "kiMqIQGxg4Tu9UIbT1iyZypyCMb2"
 
 export const reducer = (state = initialState, action) => {
 

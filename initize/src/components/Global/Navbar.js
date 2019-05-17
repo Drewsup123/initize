@@ -12,7 +12,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import NavLogo from './logo_transparent.png'
+import NavLogo from './logo_transparent.png';
+import {Link} from 'react-router-dom';
 
 const styles = theme => ({
     root: {
@@ -162,7 +163,7 @@ class Navbar extends React.Component {
         <div className={classes.root}>
             <AppBar position="static">
             <Toolbar>
-                <img src={NavLogo} alt="logo" style={{height:"80px"}}/>
+                <Link to='/dashboard'><img src={NavLogo} alt="logo" style={{height:"80px"}}/></Link>
 
                 <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
