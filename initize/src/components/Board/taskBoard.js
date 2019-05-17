@@ -146,13 +146,13 @@ class TaskBoard extends React.Component{
 
     render(){
         return(
-            <div>
-                <h1>{this.state.boardName}</h1>
+            <div className="task-board">
+                {/* <h1>{this.state.boardName}</h1>
                 <h4>Owned by: {this.state.boardOwner.name}</h4>
-                <p>createdAt: {this.state.createdAt}</p>
+                <p>createdAt: {this.state.createdAt}</p> */}
                 <button onClick={this.handleOpen}>add a task</button>
                 <button onClick={this.GetBoard}>Get Snap</button>
-                <SortableDiv url={this.props.match.params.id} shouldCancelStart={this.shouldCancelStart} items={this.state.tasks} onSortEnd={this.onSortEnd} />
+                <SortableDiv url={this.props.match.params.id} shouldCancelStart={this.shouldCancelStart} items={this.state.tasks} onSortEnd={this.onSortEnd} lockAxis="y"/>
 
                 {/* DIALOG */}
                 <Dialog

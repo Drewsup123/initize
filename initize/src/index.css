@@ -37,3 +37,21 @@
 .selected{
     border:1px solid black;
 }
+
+.board-content{
+    display:flex;
+    flex-direction: row;
+}
+
+.side-menu{
+    width:10%;
+    padding:10px;
+    border-right: 1px solid black;
+    position: fixed;
+}
+
+.task-board{
+    width:89%;
+    height:100vh;
+    margin-left:11%;
+}

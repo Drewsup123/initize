@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import {reducer} from './reducers/index';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import './index.css';
 require('dotenv').config();
 fb();
 

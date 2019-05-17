@@ -17,6 +17,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Navbar from '../components/Global/Navbar';
 import TaskBoard from '../components/Board/taskBoard';
+import SideMenu from '../components/Board/SideMenu';
 
 class Board extends React.Component{
     constructor(props){
@@ -111,10 +112,17 @@ class Board extends React.Component{
         this.GetBoard();
         console.log(this.state)
         this.newTaskListener();
+        this.changedTaskListener();
     }
 
     newTaskListener = () => {
         firebase.database().ref('boards').child(this.props.match.params.id).child('tasks').on('child_changed', () => {
+            this.GetBoard();
+        })
+    }
+
+    changedTaskListener = () => {
+        firebase.database().ref('/boards/'+this.props.match.params.id+'/tasks').on('value', () => {
             this.GetBoard();
         })
     }
@@ -127,7 +135,10 @@ class Board extends React.Component{
         return(
             <div>
                 <Navbar />
-                <TaskBoard {...this.props}/>
+                <div className="board-content">
+                    <SideMenu {...this.state}/>
+                    <TaskBoard {...this.props}/>
+                </div>
                 {/* <h1>{this.state.boardName}</h1>
                 <h4>Owned by: {this.state.boardOwner.name}</h4>
                 <p>createdAt: {this.state.createdAt}</p>
