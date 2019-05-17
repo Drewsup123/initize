@@ -26,9 +26,9 @@ const SortableDiv = SortableContainer(({items}) => {
                 </TableHead>
 
                 <TableBody>
-                {Object.keys(items).map((key, index) => (
+                {items ? Object.keys(items).map((key, index) => (
                     <Task key={key} index={key} value={items[key]} />
-                ))}
+                )) : null}
                 </TableBody>
             </Table>
         </Paper>
