@@ -119,7 +119,7 @@ class TaskBoard extends React.Component{
     }
 
     newTaskListener = () => {
-        firebase.database().ref('boards').child(this.props.match.params.id).child('tasks').on('child_changed', () => {
+        firebase.database().ref('boards').child(this.props.match.params.id).child('tasks').on('child_added', () => {
             this.GetBoard();
         })
     }
