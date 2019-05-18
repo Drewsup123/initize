@@ -14,6 +14,7 @@ const SortableDiv = SortableContainer(({items, url}) => {
             <Table>
                 <TableHead>
                     <TableRow>
+                        <TableCell></TableCell>
                         <TableCell>Task</TableCell>
                         <TableCell>Priority</TableCell>
                         <TableCell>User</TableCell>

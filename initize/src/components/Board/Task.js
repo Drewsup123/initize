@@ -9,7 +9,7 @@ import * as firebase from "firebase/app";
 import {withRouter} from 'react-router-dom';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import MenuIcon from '@material-ui/icons/Menu';
 import Avatar from '@material-ui/core/Avatar';
 
 const Task = SortableElement(({value, url, index}) => {
@@ -120,6 +120,7 @@ const Task = SortableElement(({value, url, index}) => {
 
     return(
             <TableRow>
+                <TableCell><MenuIcon /></TableCell>
                 {/* Task Name */}
                 <TableCell><input onChange={onChangeHandler} onKeyDown={e => e.keyCode === 13?onSubmitEdits():null} name="task" className="task-input" type="text" value={edits.task} /></TableCell>
                 {/* Priority */}
@@ -175,7 +176,7 @@ const Task = SortableElement(({value, url, index}) => {
                 {/* Notes */}
                 <TableCell><input onSubmit={onSubmitEdits} onChange={onChangeHandler} onKeyDown={e => e.keyCode === 13?onSubmitEdits():null} name="notes" className="task-input" type="text" value={edits.notes} /></TableCell>
                 <TableCell>
-                    <input type="button" style={{background:"none", border:"none", cursor:"pointer"}} onClick={onDeleteTask} value="delete"/>
+                    <button style={{borderRadius:"5px", border:"1px solid black", cursor:"pointer"}} onClick={onDeleteTask}>Delete</button>
                 </TableCell>
             </TableRow>
     )

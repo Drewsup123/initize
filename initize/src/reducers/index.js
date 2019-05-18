@@ -13,7 +13,7 @@ const initialState = {
     name:"Drew Johnson",
     phoneNumber:"",
     uid:"kiMqIQGxg4Tu9UIbT1iyZypyCMb2",
-    profilePicture:"",
+    profilePicture:"http://getdrawings.com/free-icon/funny-profile-icons-72.png",
     dateJoined: 1557950495292,
     boardsId:[],
     boards:[]
