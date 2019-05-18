@@ -23,6 +23,7 @@ class Dashboard extends React.Component{
             open: false,
             creatingBoard: false,
             boardName: "",
+            joinOpen: false,
         }
     }
 
@@ -32,6 +33,14 @@ class Dashboard extends React.Component{
 
     handleOpen = () => {
         this.setState({open: true});
+    }
+
+    handleJoinOpen = () => {
+        this.setState({joinOpen: true})
+    }
+
+    handleJoinClose = () => {
+        this.setState({joinOpen: false})
     }
 
     handleChange = e => {
@@ -111,9 +120,9 @@ class Dashboard extends React.Component{
                 <h1>{this.props.name}'s Boards</h1>
                 {this.props.loggedIn ? <h1>Signed in</h1> : <h1>Signed out</h1>}
 
-                <Fab onClick={this.getUsersBoards} color="primary" aria-label="Add" size="medium">
-                        JOIN
-                    </Fab>
+                <Fab onClick={this.handleJoinOpen} color="primary" aria-label="Add" size="medium">
+                    JOIN
+                </Fab>
 
                 <Fab onClick={this.handleOpen} color="primary" aria-label="Add" size="medium">
                     CREATE
@@ -145,6 +154,34 @@ class Dashboard extends React.Component{
                         </Button>
                         <Button onClick={this.createGroup} disabled={this.state.creatingBoard} color="primary">
                         Create
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                {/* End DIALOG */}
+                {/* DIALOG */}
+                <Dialog
+                open={this.state.joinOpen}
+                onClose={this.handleJoinClose}
+                aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Join a board</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                        autoFocus
+                        margin="dense"
+                        label="Invite Code"
+                        fullWidth
+                        disabled={this.state.creatingBoard}
+                        onChange={this.handleChange}
+                        />
+                    </DialogContent>
+
+                    <DialogActions>
+                        <Button disabled={this.state.creatingBoard} onClick={this.handleClose} color="primary">
+                        Cancel
+                        </Button>
+                        <Button onClick={this.createGroup} disabled={this.state.creatingBoard} color="primary">
+                        Join
                         </Button>
                     </DialogActions>
                 </Dialog>

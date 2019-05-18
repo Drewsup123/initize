@@ -136,7 +136,7 @@ class Board extends React.Component{
             <div>
                 <Navbar />
                 <div className="board-content">
-                    <SideMenu {...this.state}/>
+                    <SideMenu {...this.state} {...this.props}/>
                     <TaskBoard {...this.props}/>
                 </div>
                 {/* <h1>{this.state.boardName}</h1>
