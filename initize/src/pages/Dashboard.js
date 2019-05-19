@@ -24,6 +24,7 @@ class Dashboard extends React.Component{
             creatingBoard: false,
             boardName: "",
             joinOpen: false,
+            inviteCode:"",
         }
     }
 
@@ -41,6 +42,46 @@ class Dashboard extends React.Component{
 
     handleJoinClose = () => {
         this.setState({joinOpen: false})
+    }
+
+    handleChangeJoin = e => {
+        this.setState({inviteCode : e.target.value})
+    }
+
+    joinBoard = () => {
+        firebase.database().ref('invites').child(this.state.inviteCode).once('value').then(snap => {
+            const boardId = snap.val();
+            // IMPLEMENT THIS WHEN PAYMENT SYSTEM IS IN PLACE
+            // firebase.database().ref('boards').child(boardId).once('value').then(snapshot => {
+            //     const info = snapshot.val();
+            //     if(info.users.length + 1 > info.users.maxUsers){
+            //         alert("Not allowed in : Board does not have enough available slots")
+            //     }else{
+            //         firebase.firestore().collection('users').doc(this.props.id).update({
+            //             boards: firestore.arrayUnion(boardId);
+            //         })
+            //     }
+            // })
+            firebase.firestore().collection('users').doc(this.props.uid).update({
+                boards : firebase.firestore.FieldValue.arrayUnion(boardId)
+            }).then(() => {
+                const ref = firebase.database().ref('/boards/' + boardId + '/users').push();
+                ref.set({
+                        name: this.props.name, 
+                        profilePicture: this.props.profilePicture,
+                        uid: this.props.uid
+                }).then(res => {
+                    alert("you have been added successfully")
+                })
+                .catch(err => {
+                    console.log(err);
+                    alert("Error adding you to the board")
+                })
+            })
+        }).catch(err => {
+            console.log(err);
+            alert("Error joining the board check the invite code or make sure it is not outdated")
+        })
     }
 
     handleChange = e => {
@@ -92,7 +133,7 @@ class Dashboard extends React.Component{
 
     getUsersBoards = () => {
         let final = [];
-        if(this.props.boardsId.length === 0){
+        if(!this.props.boardsId){
             return;
         }
         this.props.boardsId.forEach(board => {
@@ -172,15 +213,15 @@ class Dashboard extends React.Component{
                         label="Invite Code"
                         fullWidth
                         disabled={this.state.creatingBoard}
-                        onChange={this.handleChange}
+                        onChange={this.handleChangeJoin}
                         />
                     </DialogContent>
 
                     <DialogActions>
-                        <Button disabled={this.state.creatingBoard} onClick={this.handleClose} color="primary">
+                        <Button disabled={this.state.creatingBoard} onClick={this.handleJoinClose} color="primary">
                         Cancel
                         </Button>
-                        <Button onClick={this.createGroup} disabled={this.state.creatingBoard} color="primary">
+                        <Button onClick={this.joinBoard} disabled={this.state.creatingBoard} color="primary">
                         Join
                         </Button>
                     </DialogActions>
