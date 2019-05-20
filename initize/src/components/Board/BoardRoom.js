@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import TextField from '@material-ui/core/TextField';
 
 class BoardRoom extends React.Component{
     constructor(){
@@ -26,51 +27,76 @@ class BoardRoom extends React.Component{
     }
 
     sendMessage = () => {
-
+        const message = {
+            timestamp : firebase.database.ServerValue.TIMESTAMP,
+            content: this.state.newMessage,
+            user:{ 
+                name: this.props.name, 
+                profilePicture: this.props.profilePicture,
+                uid: this.props.uid,
+            },
+        }
+        firebase.database().ref('boardRooms').child(this.props.match.params.id)
+            .push()
+            .set(message).then(res => {
+            console.log(res);
+            })
+            .catch(err => {
+                alert("error");
+                console.log(err);
+            })
     }
 
     onChangeHandler = e => {
-
+        this.setState({newMessage : e.target.value});
     }
 
     componentDidMount(){
         this.getMessages();
+        this.newMessageListener();
     }
 
-    addBoilerPlateMessage = e => {
-        const message = {content: "Hello world", name: "Drew Johnson", profilePicture: 'https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'};
-        firebase.database().ref('boardRooms').child(this.props.match.params).set({messages : [message]}).then(res => {
-            console.log(res);
-        })
-        .catch(err => {
-            alert("error");
-            console.log(err);
+    newMessageListener = () => {
+        firebase.database().ref('boardRooms').child(this.props.match.params.id).on('child_added', () => {
+            this.getMessages();
         })
     }
 
     render(){
         return(
-            <div className="board-room">
+            <div >
                 <h1>Board Room Here!!!!</h1>
-                <button onClick={this.addBoilerPlateMessage} >mesasge</button>
                 <List>
-                    <ListItem>
+                    {this.state.messages ? Object.keys(this.state.messages).map((key, index) => 
+                    <ListItem key={index}>
                         <ListItemAvatar>
-                            <Avatar alt="Remy Sharp" src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairStraight&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light' />
+                            <Avatar alt="avatar" src={this.state.messages[key].user.profilePicture} />
                         </ListItemAvatar>
-                        <ListItemText>This is just a test comment</ListItemText>
-                    </ListItem>
-                </List>
-                <List>
-                    {this.state.messages ? this.state.messages.map(message => 
-                    <ListItem key={message.text}>
-                        <ListItemAvatar>
-                            <Avatar alt="avatar" src={message.profilePicture} />
-                        </ListItemAvatar>
-                        {message.text}
+                        <ListItemText 
+                            primary={this.state.messages[key].user.name}
+                            secondary={this.state.messages[key].content}
+                        />
+                            {/* {this.state.messages[key].content}
+                        </ListItemText> */}
                     </ListItem>)
                     :null}
                 </List>
+                <div>
+                    <TextField
+                        id="filled-full-width"
+                        label="Place your message here"
+                        style={{ margin: 8 }}
+                        placeholder="Message"
+                        fullWidth
+                        margin="normal"
+                        variant="filled"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        onChange={this.onChangeHandler}
+                    />
+                    <button onClick={this.sendMessage}>Send</button>
+                </div>
             </div>
         )
     }
