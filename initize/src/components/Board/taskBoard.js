@@ -113,6 +113,8 @@ class TaskBoard extends React.Component{
         this.GetBoard();
         console.log(this.state)
         this.newTaskListener();
+        this.removedTaskListener();
+        this.changedTaskListener();
     }
 
     newTaskListener = () => {
@@ -123,6 +125,12 @@ class TaskBoard extends React.Component{
 
     changedTaskListener = () => {
         firebase.database().ref('/boards/' + this.props.match.params.id +"/tasks/").on('child_changed', () => {
+            this.GetBoard();
+        })
+    }
+
+    removedTaskListener = () => {
+        firebase.database().ref('boards').child(this.props.match.params.id).child('tasks').on('child_removed', () => {
             this.GetBoard();
         })
     }
