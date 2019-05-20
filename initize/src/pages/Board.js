@@ -18,6 +18,8 @@ import Select from '@material-ui/core/Select';
 import Navbar from '../components/Global/Navbar';
 import TaskBoard from '../components/Board/taskBoard';
 import SideMenu from '../components/Board/SideMenu';
+import BoardRoom from '../components/Board/BoardRoom';
+import { Route } from 'react-router-dom';
 
 class Board extends React.Component{
     constructor(props){
@@ -137,7 +139,8 @@ class Board extends React.Component{
                 <Navbar />
                 <div className="board-content">
                     <SideMenu {...this.state} {...this.props}/>
-                    <TaskBoard {...this.props}/>
+                    <Route exact path="/board/:id" render={() => <TaskBoard {...this.props}/>} />
+                    <Route path="/board/:id/board-room" render={() => <BoardRoom {...this.props}/>} />
                 </div>
                 {/* <h1>{this.state.boardName}</h1>
                 <h4>Owned by: {this.state.boardOwner.name}</h4>

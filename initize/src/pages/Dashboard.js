@@ -113,6 +113,7 @@ class Dashboard extends React.Component{
             firebase.firestore().collection('users').doc(this.props.uid).update({
                 boards: firebase.firestore.FieldValue.arrayUnion(key)
             }).then(()=>{
+                // Add code somewhere around here to make a board-rooms area for public messages
                 this.props.addBoardId(key)
                 this.setState({creatingBoard: false});
                 this.getUsersBoards();
