@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 import * as firebase from "firebase/app";
 
 function SideMenu(props){
-    const [inviteCode, setInviteCode] = React.useState("")
+    const [inviteCode, setInviteCode] = React.useState("");
+    console.log("This is props sideMenu", props)
 
     const getDate = date => {
         let fdate = Date(date).toString()
@@ -29,8 +30,8 @@ function SideMenu(props){
             <hr />
             <button>Board Room/Chat</button>
             <hr />
-            <h2>Members({props.users.length}) {props.boardOwner.uid === props.uid ? <div><button onClick={generateInviteCode}>Invite</button><p>invite:{inviteCode}</p></div> : null}</h2>
-            {props.users ? props.users.map(user => <div>{user.name} <button>Start Chat</button></div>):<h3>Loading...</h3>}
+            <h2>Members({Object.keys(props.users).length}) {props.boardOwner.uid === props.uid ? <div><button onClick={generateInviteCode}>Invite</button><p>invite:{inviteCode}</p></div> : null}</h2>
+            {props.users ? Object.keys(props.users).map(user => <div>{props.users[user].name} <button>Start Chat</button></div>):<h3>Loading...</h3>}
         </div>
     )
 }

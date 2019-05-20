@@ -182,9 +182,9 @@ class TaskBoard extends React.Component{
                         </FormControl>
                         {/* User Assignment */}
                         <h3>Users</h3>
-                        {this.state.users ? this.state.users.map(user => 
-                            <div onClick={()=>this.radioHandleChangeUser(user.name, user.uid, user.profilePicture)}>
-                                {this.state.newTask.user && this.state.newTask.user.uid === user.uid ? <h4 style={{color: 'red'}}>{user.name}</h4> : <h4>{user.name}</h4>}
+                        {this.state.users && Object.keys(this.state.users).length ? Object.keys(this.state.users).map(user => 
+                            <div onClick={()=>this.radioHandleChangeUser(this.state.users[user].name, this.state.users[user].uid, this.state.users[user].profilePicture)}>
+                                {this.state.newTask.user && this.state.newTask.user.uid === this.state.users[user].uid ? <h4 style={{color: 'red'}}>{this.state.users[user].name}</h4> : <h4>{this.state.users[user].name}</h4>}
                             </div>
                         ):null}
                         {/* Description */}
