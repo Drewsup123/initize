@@ -152,8 +152,8 @@ class TaskBoard extends React.Component{
     render(){
         return(
             <div className="task-board">
-                <Fab onClick={this.handleOpen} size="small" color="primary"><AddIcon/></Fab>Add Task
-                <SortableDiv url={this.props.match.params.id} shouldCancelStart={this.shouldCancelStart} items={this.state.tasks} onSortEnd={this.onSortEnd} lockAxis="y" lockToContainerEdges={true}/>
+                {/* <Fab onClick={this.handleOpen} size="small" color="primary"><AddIcon/></Fab>Add Task */}
+                <SortableDiv handleOpen={this.handleOpen} url={this.props.match.params.id} shouldCancelStart={this.shouldCancelStart} items={this.state.tasks} onSortEnd={this.onSortEnd} lockAxis="y" lockToContainerEdges={true}/>
 
                 {/* DIALOG */}
                 <Dialog
