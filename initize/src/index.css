@@ -83,3 +83,54 @@
     box-sizing: border-box;
     padding:20px;
 }
+
+/* Board Room Css */
+.board-room{
+    width:80%;
+    box-sizing: border-box;
+    padding:2%;
+}
+
+.board-room .chat-box{
+    border:1px solid black;
+    height:80%;
+    background:rgb(196, 195, 195);
+    box-sizing: border-box;
+    padding:20px 2%;
+}
+
+.board-room .chat-message{
+    border:1px solid black;
+    margin-bottom:5px;
+    width:90%;
+    border-radius:5px;
+    background:whitesmoke;
+}
+
+.board-room .users-message{
+    border-left:2px solid orange;
+}
+
+.board-room .chat-message-date{
+    width:20%;
+    text-align: right;
+}
+
+.board-room .input-field{
+    width:100%;
+    position:fixed;
+    left:0px;
+    bottom:10px;
+    height:100px;
+    width:100%;
+    margin-left:12.5%;
+    display:flex;
+    align-items: center;
+}
+
+.board-room .input-field button{
+    width:3%;
+    height:50px;
+    background:rgb(96, 96, 252);
+    border-radius:10px;
+}

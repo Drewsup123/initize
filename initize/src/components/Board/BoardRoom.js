@@ -4,8 +4,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
+import moment from 'moment';
 
 class BoardRoom extends React.Component{
     constructor(){
@@ -62,32 +64,39 @@ class BoardRoom extends React.Component{
         })
     }
 
+    timeFromNow = timestamp => moment(timestamp).fromNow();
+
+    getDate = date => {
+        return moment(date).subtract(1, 'days').calendar();
+    }
+
     render(){
         return(
-            <div >
-                <h1>Board Room Here!!!!</h1>
-                <List>
+            <div className="board-room">
+                <List className="chat-box">
                     {this.state.messages ? Object.keys(this.state.messages).map((key, index) => 
-                    <ListItem key={index}>
-                        <ListItemAvatar>
+                    <ListItem className={`chat-message ${this.state.messages[key].user.uid === this.props.uid ? "users-message" : ""}`} key={index}>
+                        <ListItemAvatar className="chat-message-avatar">
                             <Avatar alt="avatar" src={this.state.messages[key].user.profilePicture} />
                         </ListItemAvatar>
                         <ListItemText 
+                            className="chat-message-content"
                             primary={this.state.messages[key].user.name}
                             secondary={this.state.messages[key].content}
                         />
-                            {/* {this.state.messages[key].content}
-                        </ListItemText> */}
+                        <ListSubheader className="chat-message-date">
+                            {this.timeFromNow(this.state.messages[key].timestamp)}
+                        </ListSubheader>
                     </ListItem>)
                     :null}
                 </List>
-                <div>
+                <div className="input-field">
                     <TextField
+
                         id="filled-full-width"
                         label="Place your message here"
-                        style={{ margin: 8 }}
+                        style={{ margin: 8 , width:"73%"}}
                         placeholder="Message"
-                        fullWidth
                         margin="normal"
                         variant="filled"
                         InputLabelProps={{
