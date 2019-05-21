@@ -49,8 +49,19 @@ class PrivateChat extends React.Component {
         })
     }
 
+    newChatListener = () => {
+        const currentUser = this.props.uid;
+        const chattingUser = this.props.params.uid;
+        let first = currentUser > chattingUser ? currentUser : chattingUser;
+        let second = first === currentUser ? chattingUser : currentUser;
+        firebase.database().ref('privateMessages')
+        .child(first + second)
+        .on('child_added', ()=>this.getPrivateMessages());
+    }
+
     componentDidMount(){
-        this.getPrivateMessages()
+        this.getPrivateMessages();
+        this.newChatListener();
     }
 
     handleChange = e => {
