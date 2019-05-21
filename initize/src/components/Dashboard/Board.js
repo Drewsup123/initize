@@ -7,11 +7,14 @@ import {Link} from 'react-router-dom';
 const styles = props => ({
     boardContainer:{
         height:"250px",
-        width:"25%",
+        width:"30%",
         display:"flex",
         justifyContent:"center",
         alignItems:"center",
-        background:"red",
+        background: 'rgb(0,0,0)',
+        background: 'radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(73,70,252,1) 100%)',
+        border: '2px solid white',
+        marginTop:"20px",
     },
     boardTitle:{
         textAlign:"center",
@@ -26,10 +29,8 @@ const styles = props => ({
 function Board(props){
     const { classes } = props;
     return(
-        <Link to={`/board/${props.id}`}>
-            <div className={classes.boardContainer}>
-                <h4 className={classes.boardTitle}>{props.boardTitle}</h4>
-            </div>
+        <Link className={classes.boardContainer} to={`/board/${props.id}`}>
+            <h4 className={classes.boardTitle}>{props.boardTitle}</h4>
         </Link>
     );
 }

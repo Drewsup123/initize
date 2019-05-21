@@ -25,6 +25,7 @@ class Dashboard extends React.Component{
             boardName: "",
             joinOpen: false,
             inviteCode:"",
+            loading: false,
         }
     }
 
@@ -133,6 +134,7 @@ class Dashboard extends React.Component{
     }
 
     getUsersBoards = () => {
+        this.setState({loading: true});
         let final = [];
         if(!this.props.boardsId){
             return;
@@ -147,31 +149,40 @@ class Dashboard extends React.Component{
                 alert("There was an error recieving your boards :(", err.message)
             })
         })
-        this.props.addBoard(final);
+        return(final);
     }
 
-    componentDidMount = () => {
-        this.props.loggedIn ? this.getUsersBoards() : this.props.history.push('/login') ;
-        setTimeout(()=>{this.forceUpdate()},1000)
+    componentDidMount = async() => {
+        await this.props.loggedIn ? this.props.addBoard(this.getUsersBoards()) : this.props.history.push('/login') ;
+        setTimeout(()=>this.forceUpdate(), 2000);
+        this.setState({loading: false});
     }
 
     render(){
         return(
             <div>
                 <Navbar/>
-                <h1>{this.props.name}'s Boards</h1>
-                {this.props.loggedIn ? <h1>Signed in</h1> : <h1>Signed out</h1>}
+                <div className="dashboard">
+                    <h1>{this.props.name}'s Boards</h1>
+                    
+                    <div>
+                        <Fab onClick={this.handleJoinOpen} color="primary" aria-label="Add" size="medium">
+                            JOIN
+                        </Fab>
 
-                <Fab onClick={this.handleJoinOpen} color="primary" aria-label="Add" size="medium">
-                    JOIN
-                </Fab>
+                        <Fab onClick={this.handleOpen} color="primary" aria-label="Add" size="medium">
+                            CREATE
+                        </Fab>
+                    </div>
 
-                <Fab onClick={this.handleOpen} color="primary" aria-label="Add" size="medium">
-                    CREATE
-                </Fab>
-
-                {this.props.boards ? this.props.boards.map(board => <Board id={board.id} boardTitle={board.name} />) : null}
-
+                    {this.state.loading ? <p>Loading...</p> : null}
+                    <div className="user-boards">
+                        {this.props.boards 
+                        ? this.props.boards.map(board => <Board id={board.id} boardTitle={board.name} />) 
+                        : <p>User has no boards</p>
+                        }
+                    </div>
+                </div>
                 {/* DIALOG */}
                 <Dialog
                 open={this.state.open}

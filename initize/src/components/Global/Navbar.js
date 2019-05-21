@@ -165,7 +165,7 @@ class Navbar extends React.Component {
             <Toolbar>
                 <Link to='/dashboard'><img src={NavLogo} alt="logo" style={{height:"80px"}}/></Link>
 
-                <div className={classes.grow} />
+                {/* <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
 
                     <IconButton color="inherit">
@@ -194,7 +194,7 @@ class Navbar extends React.Component {
                     <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
                         <MoreIcon />
                     </IconButton>
-                </div>
+                </div> */}
             </Toolbar>
 
             </AppBar>
