@@ -47,7 +47,7 @@
     width:10%;
     padding:10px;
     border-right: 1px solid black;
-    height:100vh;
+    height:50vh;
 }
 
 .task-board{
@@ -87,8 +87,9 @@
 /* Board Room Css */
 .board-room{
     width:80%;
+    height:90vh;
     box-sizing: border-box;
-    padding:2%;
+    padding:20px;
 }
 
 .board-room .chat-box{
@@ -97,14 +98,16 @@
     background:rgb(196, 195, 195);
     box-sizing: border-box;
     padding:20px 2%;
+    overflow-y:scroll;
 }
 
 .board-room .chat-message{
     border:1px solid black;
     margin-bottom:5px;
-    width:90%;
+    width:60%;
     border-radius:5px;
     background:whitesmoke;
+    max-height: 100vh;
 }
 
 .board-room .users-message{
@@ -118,18 +121,13 @@
 
 .board-room .input-field{
     width:100%;
-    position:fixed;
-    left:0px;
-    bottom:10px;
-    height:100px;
-    width:100%;
-    margin-left:12.5%;
+    margin-top:50px;
     display:flex;
     align-items: center;
 }
 
 .board-room .input-field button{
-    width:3%;
+    width:9%;
     height:50px;
     background:rgb(96, 96, 252);
     border-radius:10px;

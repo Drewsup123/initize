@@ -18,6 +18,10 @@ class BoardRoom extends React.Component{
         }
     }
 
+    scrollToBottom() {
+        this.el.scrollIntoView({ behavior: 'smooth' });
+    }
+
     getMessages = () => {
         firebase.database().ref('/boardRooms/' + this.props.match.params.id ).once('value').then(snap => {
             console.log("this is the messages", snap.val())
@@ -56,6 +60,11 @@ class BoardRoom extends React.Component{
     componentDidMount(){
         this.getMessages();
         this.newMessageListener();
+        this.scrollToBottom();
+    }
+
+    componentDidUpdate(){
+        this.scrollToBottom();
     }
 
     newMessageListener = () => {
@@ -89,13 +98,14 @@ class BoardRoom extends React.Component{
                         </ListSubheader>
                     </ListItem>)
                     :null}
+                    <div ref={el => { this.el = el; }} />
                 </List>
                 <div className="input-field">
                     <TextField
-
+                        fullWidth
                         id="filled-full-width"
                         label="Place your message here"
-                        style={{ margin: 8 , width:"73%"}}
+                        style={{ width:"90%"}}
                         placeholder="Message"
                         margin="normal"
                         variant="filled"
