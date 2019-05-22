@@ -13,7 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 const SortableDiv = SortableContainer(({items, url, handleOpen}) => {
     return (
         <Paper>
-            <Table>
+            <Table style={{width:'100%'}}>
                 <TableHead>
                     <TableRow>
                         <TableCell></TableCell>
