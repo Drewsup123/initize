@@ -6,6 +6,8 @@ import PrivateChat from './PrivateChat';
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import ChatIcon from '@material-ui/icons/Chat';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -59,11 +61,12 @@ function SideMenu(props){
             <hr />
             <h2>Members({Object.keys(props.users).length}) {props.boardOwner.uid === props.uid ?<Fab onClick={generateInviteCode} size="small" color="primary"><AddIcon/></Fab>: null}</h2>
             {props.users ? Object.keys(props.users).map(user => 
-            <div>
+            <div className="side-menu-member">
                 {props.users[user].name} 
-                <button 
-                    onClick={() => openPrivateChat(props.users[user].name, props.users[user].uid, props.users[user].profilePicture)}
-                >Start Chat</button>
+                <div>
+                    <Fab size="small" onClick={() => openPrivateChat(props.users[user].name, props.users[user].uid, props.users[user].profilePicture)}><ChatIcon /></Fab>
+                    {props.boardOwner.uid === props.uid ? <Fab color="secondary" size="small"><DeleteIcon/></Fab> : null}
+                </div>
             </div>)
             :<h3>Loading...</h3>}
             {isOpen ? <PrivateChat params={privateChatParams} {...props}/> : null}
