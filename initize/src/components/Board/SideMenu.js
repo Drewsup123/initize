@@ -52,8 +52,10 @@ function SideMenu(props){
             <h6>Created on: {getDate(props.createdAt)}</h6>
             {props.boardOwner.uid === props.uid ? <Button color="primary">Edit Settings/Upgrade</Button> : null}
             <hr />
-            <Link to={`/board/${props.match.params.id}/board-room`}>Board Room Chat </Link>
-            <Link to={`/board/${props.match.params.id}`}>Progress Board </Link>
+            <div className="side-menu-links">
+                <Link to={`/board/${props.match.params.id}/board-room`}>Board Room Chat </Link>
+                <Link to={`/board/${props.match.params.id}`}>Progress Board </Link>
+            </div>
             <hr />
             <h2>Members({Object.keys(props.users).length}) {props.boardOwner.uid === props.uid ?<Fab onClick={generateInviteCode} size="small" color="primary"><AddIcon/></Fab>: null}</h2>
             {props.users ? Object.keys(props.users).map(user => 
@@ -65,6 +67,7 @@ function SideMenu(props){
             </div>)
             :<h3>Loading...</h3>}
             {isOpen ? <PrivateChat params={privateChatParams} {...props}/> : null}
+
             {/* Dialog for Invite Code */}
             <Dialog
             open={inviteOpen}
