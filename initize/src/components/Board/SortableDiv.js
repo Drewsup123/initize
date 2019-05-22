@@ -27,7 +27,7 @@ const SortableDiv = SortableContainer(({items, url, handleOpen}) => {
                     </TableRow>
                 </TableHead>
 
-                <TableBody>
+                <TableBody style={{width:"100%"}}>
                 {items ? Object.keys(items).map((key, index) => (
                     <Task url={url} key={key} index={key} value={items[key]} />
                 )) : null}

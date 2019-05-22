@@ -15,7 +15,7 @@ export const handleSignup = (payload) => dispatch => {
   dispatch({type: SIGNUP, payload:payload})
 } 
 
-export const addBoard = payload => dispatch => {
+export const addBoard = (payload) => dispatch => {
   dispatch({type:ADDBOARD, payload:payload})
 }
 

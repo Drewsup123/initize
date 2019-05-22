@@ -175,7 +175,7 @@ const Task = SortableElement(({value, url, index}) => {
                 <TableCell style={{width:"17%"}}><input onChange={onChangeHandler} onKeyDown={e => e.keyCode === 13?onSubmitEdits():null} name="description" className="task-input" type="text" value={edits.description} /></TableCell>
                 {/* Notes */}
                 <TableCell style={{width:"17%"}}><input onSubmit={onSubmitEdits} onChange={onChangeHandler} onKeyDown={e => e.keyCode === 13?onSubmitEdits():null} name="notes" className="task-input" type="text" value={edits.notes} /></TableCell>
-                <TableCell style={{width:"4%"}}>
+                <TableCell style={{width:"6%"}}>
                     <button style={{borderRadius:"5px", border:"1px solid black", cursor:"pointer"}} onClick={onDeleteTask}>Delete</button>
                 </TableCell>
             </TableRow>

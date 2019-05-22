@@ -164,7 +164,7 @@ class Navbar extends React.Component {
             <AppBar position="static">
             <Toolbar>
                 <Link to='/dashboard'><img src={NavLogo} alt="logo" style={{height:"80px"}}/></Link>
-
+                <h1>This App is still in development</h1>
                 {/* <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
 

@@ -15,10 +15,11 @@ import * as firebase from "firebase/app";
 import {connect} from 'react-redux';
 import {addBoard, addBoardId} from '../actions/index';
 import {withRouter} from 'react-router-dom';
+import RefreshIcon from '@material-ui/icons/Refresh'
 
 class Dashboard extends React.Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             open: false,
             creatingBoard: false,
@@ -26,6 +27,7 @@ class Dashboard extends React.Component{
             joinOpen: false,
             inviteCode:"",
             loading: false,
+            boards: [],
         }
     }
 
@@ -137,6 +139,7 @@ class Dashboard extends React.Component{
         this.setState({loading: true});
         let final = [];
         if(!this.props.boardsId){
+            alert("no props")
             return;
         }
         this.props.boardsId.forEach(board => {
@@ -149,13 +152,16 @@ class Dashboard extends React.Component{
                 alert("There was an error recieving your boards :(", err.message)
             })
         })
+        this.setState({loading: false})
         return(final);
     }
 
-    componentDidMount = async() => {
-        await this.props.loggedIn ? this.props.addBoard(this.getUsersBoards()) : this.props.history.push('/login') ;
-        setTimeout(()=>this.forceUpdate(), 2000);
+    componentDidMount = () => {
+        const usersBoards = this.getUsersBoards();
+        this.props.loggedIn ? this.props.addBoard(usersBoards): this.props.history.push('/login');
+        // this.setState({boards: usersBoards})
         this.setState({loading: false});
+        console.log(this.state.boards)
     }
 
     render(){
@@ -163,7 +169,7 @@ class Dashboard extends React.Component{
             <div>
                 <Navbar/>
                 <div className="dashboard">
-                    <h1>{this.props.name}'s Boards</h1>
+                    <h1>{this.props.name}'s Boards <Fab onClick={()=>this.forceUpdate()} color="primary"size="small"><RefreshIcon/></Fab></h1>
                     
                     <div>
                         <Fab onClick={this.handleJoinOpen} color="primary" aria-label="Add" size="medium">
@@ -177,7 +183,7 @@ class Dashboard extends React.Component{
 
                     {this.state.loading ? <p>Loading...</p> : null}
                     <div className="user-boards">
-                        {this.props.boards 
+                        {this.props.boards && this.props.boards.length
                         ? this.props.boards.map(board => <Board id={board.id} boardTitle={board.name} />) 
                         : <p>User has no boards</p>
                         }
