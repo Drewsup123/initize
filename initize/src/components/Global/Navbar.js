@@ -23,6 +23,7 @@ class Navbar extends React.Component {
         return (
         <div className={classes.root}>
             <Link to='/dashboard'><img src={NavLogo} alt="logo" style={{height:"100px"}}/></Link>
+            <p>Account Settings</p>
         </div>
         );
     }

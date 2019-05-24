@@ -8,6 +8,10 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Button from '@material-ui/core/Button';
+import mime from 'mime-types';
+import uuidv4 from "uuid/v4";
 
 class BoardRoom extends React.Component{
     constructor(){
@@ -15,6 +19,7 @@ class BoardRoom extends React.Component{
         this.state = {
             messages: [],
             newMessage:"",
+            file:"",
         }
     }
 
@@ -75,6 +80,57 @@ class BoardRoom extends React.Component{
         })
     }
 
+    addFile = e => {
+        const file = e.target.files[0];
+        if (file) {
+            this.setState({ file : file });
+        }
+        console.log("File: ", this.state.file);
+    }
+
+    uploadFile = (file, metaData) => {
+        // Sets the upload path and creates the ref with the file extension 
+        const uploadPath = `/boardrooms/${this.props.match.params.id}/${uuidv4()}.${metaData.contentType}`;
+        firebase.storage().ref().child(uploadPath).put(file, metaData).then(snapshot => {
+            snapshot.ref.getDownloadURL().then(url => {
+                return(url)
+            })
+            console.log("Storage Response")
+        })
+        .catch(err => {
+            console.log("Storage Error", err);
+        })
+    }
+
+    sendFile = () => {
+        const {file} = this.state;
+        if (file !== null || file != ""){
+            const metaData = {contentType: mime.lookup(file.name)};
+            const fileUrl = this.uploadFile(file, metaData);
+            console.log("FILE URL", fileUrl)
+            const message = {
+                timestamp : firebase.database.ServerValue.TIMESTAMP,
+                file: fileUrl,
+                user:{ 
+                    name: this.props.name, 
+                    profilePicture: this.props.profilePicture,
+                    uid: this.props.uid,
+                },
+            };
+            firebase.database().ref('boardRooms').child(this.props.match.params.id)
+            .push()
+            .set(message).then(res => {
+            console.log(res);
+            })
+            .catch(err => {
+                alert("error");
+                console.log(err);
+            })
+        }else{
+            alert("no file")
+        }
+    }
+
     timeFromNow = timestamp => moment(timestamp).fromNow();
 
     getDate = date => {
@@ -102,6 +158,20 @@ class BoardRoom extends React.Component{
                     :null}
                     <div ref={el => { this.el = el; }} />
                 </List>
+                <button onClick={this.sendFile}>Send File</button>
+                <input
+                        accept="image/*, .pdf, .doc"
+                        id="contained-button-file"
+                        multiple
+                        type="file"
+                        style={{display:"none"}}
+                        onChange={this.addFile}
+                    />
+                    <label htmlFor="contained-button-file">
+                        <Button variant="contained" component="span">
+                            <CloudUploadIcon/>
+                        </Button>
+                    </label>
                 <form onSubmit={this.sendMessage} className="input-field">
                     <TextField
                         fullWidth

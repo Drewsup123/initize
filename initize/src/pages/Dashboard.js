@@ -106,6 +106,7 @@ class Dashboard extends React.Component{
                 uid: this.props.uid
             },
             tasks:[],
+            maxUsers:5,
         }
         boardRef.child(key)
         .update(newBoard)
@@ -157,6 +158,7 @@ class Dashboard extends React.Component{
         const usersBoards = this.getUsersBoards();
         this.props.loggedIn ? this.props.addBoard(usersBoards): this.props.history.push('/login');
         // this.setState({boards: usersBoards})
+        setTimeout(()=>{this.forceUpdate()}, 3000)
         this.setState({loading: false});
         console.log(this.state.boards)
     }

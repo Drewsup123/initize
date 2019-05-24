@@ -8,6 +8,7 @@
     "dotenv": "^8.0.0",
     "firebase": "^6.0.2",
     "firebase-tools": "^6.9.1",
+    "mime-types": "^2.1.24",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-chat-window": "^1.2.1",
@@ -19,7 +20,8 @@
     "react-sortable-hoc": "^1.9.1",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",

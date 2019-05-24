@@ -20,6 +20,7 @@ function SideMenu(props){
     const [isOpen, setIsOpen] = React.useState(false);
     const [privateChatParams, setPrivateChatParams] = React.useState({name:"", uid: "", profilePicture: ""})
     const [inviteOpen, setInviteOpen] = React.useState(false);
+    const [settingsOpen, setSettingsOpen] = React.useState(false);
     console.log("This is props sideMenu", props)
 
     const getDate = date => {
@@ -49,7 +50,7 @@ function SideMenu(props){
     }
 
     // const removeUserFromBoard = e => {
-
+        // props.users[user].name, props.users[user].uid, props.users[user].profilePicture)
     // }
 
     return(
