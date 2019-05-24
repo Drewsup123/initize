@@ -23,7 +23,7 @@ const SortableDiv = SortableContainer(({items, url, handleOpen}) => {
                         <TableCell>Status</TableCell>
                         <TableCell>Description</TableCell>
                         <TableCell>Notes</TableCell>
-                        <TableCell><Fab onClick={handleOpen} size="small" color="primary"><AddIcon/></Fab>Add Task</TableCell>
+                        <TableCell><Fab onClick={handleOpen} size="small" color="primary"><AddIcon/></Fab></TableCell>
                     </TableRow>
                 </TableHead>
 

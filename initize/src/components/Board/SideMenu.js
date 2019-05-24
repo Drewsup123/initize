@@ -48,28 +48,35 @@ function SideMenu(props){
         setIsOpen(false)
     }
 
+    // const removeUserFromBoard = e => {
+
+    // }
+
     return(
         <div className="side-menu">
-            <h1>{props.boardName}</h1>
-            <h6>Created on: {getDate(props.createdAt)}</h6>
+            <div className="side-menu-header-container">
+                <h1 className="side-menu-header">{props.boardName}</h1>
+                <h6>Created on: {getDate(props.createdAt)}</h6>
+            </div>
             {props.boardOwner.uid === props.uid ? <Button color="primary">Edit Settings/Upgrade</Button> : null}
             <hr />
+            <h2>Rooms</h2>
             <div className="side-menu-links">
-                <Link to={`/board/${props.match.params.id}/board-room`}>Board Room Chat </Link>
                 <Link to={`/board/${props.match.params.id}`}>Progress Board </Link>
+                <Link to={`/board/${props.match.params.id}/board-room`}>Board Room Chat </Link>
             </div>
             <hr />
             <h2>Members({Object.keys(props.users).length}) {props.boardOwner.uid === props.uid ?<Fab onClick={generateInviteCode} size="small" color="primary"><AddIcon/></Fab>: null}</h2>
             {props.users ? Object.keys(props.users).map(user => 
             <div className="side-menu-member">
-                {props.users[user].name} 
+                <h4>{props.users[user].name}</h4>
                 <div>
                     <Fab size="small" onClick={() => openPrivateChat(props.users[user].name, props.users[user].uid, props.users[user].profilePicture)}><ChatIcon /></Fab>
                     {props.boardOwner.uid === props.uid ? <Fab color="secondary" size="small"><DeleteIcon/></Fab> : null}
                 </div>
             </div>)
             :<h3>Loading...</h3>}
-            {isOpen ? <PrivateChat params={privateChatParams} {...props}/> : null}
+            {isOpen ? <PrivateChat params={privateChatParams} {...props} closePopup={closePopup} /> : null}
 
             {/* Dialog for Invite Code */}
             <Dialog

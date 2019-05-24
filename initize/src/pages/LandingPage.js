@@ -26,7 +26,7 @@ export default function LandingPage(){
 
             <div className="top-header">
                 <section className="top-header-section">
-                    <img src="https://media.giphy.com/media/3havrgiZhH99m/giphy.gif" />
+                    <img src="https://media.giphy.com/media/3havrgiZhH99m/giphy.gif" alt="placeholder"/>
                     <div className="section-content">
                         <h1>Manage Tasks with ease</h1>
                         <p>
@@ -44,7 +44,7 @@ export default function LandingPage(){
                             to collaborate with others via public or private messaging built straight into the application.
                         </p>
                     </div>
-                    <img src="https://media.giphy.com/media/3havrgiZhH99m/giphy.gif" />
+                    <img src="https://media.giphy.com/media/3havrgiZhH99m/giphy.gif" alt="placeholder"/>
                 </section>
             </div>
 

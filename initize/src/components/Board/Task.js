@@ -2,13 +2,10 @@ import React from 'react';
 import {SortableElement} from 'react-sortable-hoc';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as firebase from "firebase/app";
 import {withRouter} from 'react-router-dom';
-import Fab from '@material-ui/core/Fab';
-import DeleteIcon from '@material-ui/icons/Delete';
 import MenuIcon from '@material-ui/icons/Menu';
 import Avatar from '@material-ui/core/Avatar';
 
@@ -19,8 +16,8 @@ const Task = SortableElement(({value, url, index}) => {
     const [edits, setEdits] = React.useState(
             {
                 task: value.task, 
-                description: value.description,
-                notes: value.notes,
+                description: value.description || "",
+                notes: value.notes || "",
             }
         )
     let defaultStyle = {width:"100%", height:"50px", border:"none", cursor:"pointer", fontWeight:"bold", fontSize:"14px"};
@@ -117,6 +114,7 @@ const Task = SortableElement(({value, url, index}) => {
             alert(err.message)
         })
     }
+    console.log("this is what task cards are getting", value);
 
     return(
             <TableRow style={{width:"100%"}}>
@@ -147,7 +145,7 @@ const Task = SortableElement(({value, url, index}) => {
                     </Menu>
                 </TableCell>
                 {/* User */}
-                <TableCell style={{width:"10%"}}><Avatar src={value.user.profilePicture}/>{value.user ? value.user.name : "user"}</TableCell>
+                <TableCell style={{width:"10%"}}><Avatar src={value.user ? value.user.profilePicture : null}/>{value.user ? value.user.name : "No User Assigned"}</TableCell>
                 {/* Status */}
                 <TableCell style={{width:"15%"}}>
                     <button

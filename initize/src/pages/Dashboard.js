@@ -1,9 +1,6 @@
 import React from 'react';
 import Navbar from '../components/Global/Navbar';
 import Board from '../components/Dashboard/Board';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';

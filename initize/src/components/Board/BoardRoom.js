@@ -32,7 +32,8 @@ class BoardRoom extends React.Component{
         })
     }
 
-    sendMessage = () => {
+    sendMessage = e => {
+        e.preventDefault();
         const message = {
             timestamp : firebase.database.ServerValue.TIMESTAMP,
             content: this.state.newMessage,
@@ -51,6 +52,7 @@ class BoardRoom extends React.Component{
                 alert("error");
                 console.log(err);
             })
+        this.setState({newMessage: ""})
     }
 
     onChangeHandler = e => {
@@ -100,22 +102,24 @@ class BoardRoom extends React.Component{
                     :null}
                     <div ref={el => { this.el = el; }} />
                 </List>
-                <div className="input-field">
+                <form onSubmit={this.sendMessage} className="input-field">
                     <TextField
                         fullWidth
-                        id="filled-full-width"
                         label="Place your message here"
                         style={{ width:"90%"}}
                         placeholder="Message"
                         margin="normal"
                         variant="filled"
+                        onEnter={this.sendMessage}
                         InputLabelProps={{
                             shrink: true,
                         }}
                         onChange={this.onChangeHandler}
+                        value={this.state.newMessage}
+                        autoCorrect
+                        className="input-field-text-box"
                     />
-                    <button onClick={this.sendMessage}>Send</button>
-                </div>
+                </form>
             </div>
         )
     }

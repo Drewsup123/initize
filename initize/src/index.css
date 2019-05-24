@@ -1,6 +1,14 @@
 .App{
     width:100%;
     box-sizing:border-box;
+    padding:0;
+    margin:0;
+    height:98vh;
+}
+
+body{
+    background:#51168C;
+    padding:0;
 }
 
 /* Priority css */
@@ -45,8 +53,9 @@
 
 
 .task-board{
-    width:89%;
+    width:90%;
     height:90vh;
+    background:rgb(175, 175, 175);
 }
 
 .task-input{
@@ -84,29 +93,43 @@
     width:10%;
     box-sizing: border-box;
     padding:10px;
-    border-right: 1px solid black;
     height:90vh;
     display:flex;
     flex-direction: column;
     align-items: center;
-    background:rgb(77, 77, 77);
+    background:linear-gradient(rgba(248, 248, 248, 0.644), rgba(0, 0, 0, 0.582)), url("https://images.pexels.com/photos/544268/pexels-photo-544268.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+}
+
+.side-menu .side-menu-header-container{
+    display:flex;
+    align-items: center;
+    flex-direction:column;
+}
+
+.side-menu .side-menu-header{
+    border-bottom:1px solid black;
+    margin:0;
 }
 
 .side-menu .side-menu-links{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+    width:100%;
+    max-height:50vh;
 }
 
 .side-menu .side-menu-links a{
     color: black;
     text-decoration: none;
-    background:rgb(120, 120, 230);
-    border-radius: 5px;
+    width:100%;
+    border:1px solid white;
     box-sizing: border-box;
-    padding:5px;
-    margin:10px 0;
+    padding:2px;
+    margin-bottom:5px;
+    border-radius:5px;
+    background:rgba(248, 248, 248, 0.521);
+    text-align: center;
 }
 
 .side-menu .side-menu-member{
@@ -119,23 +142,32 @@
     padding:2px;
     margin-bottom:5px;
     border-radius:5px;
+    background:rgba(248, 248, 248, 0.521)
 }
 
 /* Board Room Css */
 .board-room{
-    width:80%;
+    width:90%;
     height:90vh;
     box-sizing: border-box;
     padding:20px;
+    background:#51168C;
 }
 
 .board-room .chat-box{
     border:1px solid black;
-    height:80%;
+    height:90%;
     background:rgb(196, 195, 195);
+    background:rgb(175, 175, 175);
     box-sizing: border-box;
     padding:20px 2%;
     overflow-y:scroll;
+    border-radius:5px;
+}
+
+/* hides the scrollbar in chatbox */
+.board-room ::-webkit-scrollbar{
+    display:none;
 }
 
 .board-room .chat-message{
@@ -158,14 +190,14 @@
 
 .board-room .input-field{
     width:100%;
-    margin-top:50px;
+    margin-top:10px;
     display:flex;
     align-items: center;
+    justify-content: flex-start;
+    /* border-radius: 10px; */
 }
 
-.board-room .input-field button{
-    width:9%;
-    height:50px;
-    background:rgb(96, 96, 252);
-    border-radius:10px;
+.board-room .input-field .input-field-text-box{
+    background:rgb(175, 175, 175);
+    border-radius: 10px;
 }

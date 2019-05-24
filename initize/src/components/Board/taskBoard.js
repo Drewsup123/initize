@@ -1,10 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {arrayMove} from 'react-sortable-hoc';
 import SortableDiv from './SortableDiv';
 import * as firebase from "firebase/app";
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,7 +11,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 
@@ -154,7 +150,6 @@ class TaskBoard extends React.Component{
             <div className="task-board">
                 {/* <Fab onClick={this.handleOpen} size="small" color="primary"><AddIcon/></Fab>Add Task */}
                 <SortableDiv handleOpen={this.handleOpen} url={this.props.match.params.id} shouldCancelStart={this.shouldCancelStart} items={this.state.tasks} onSortEnd={this.onSortEnd} lockAxis="y" lockToContainerEdges={true}/>
-
                 {/* DIALOG */}
                 <Dialog
                 open={this.state.open}

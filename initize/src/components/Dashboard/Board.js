@@ -11,7 +11,7 @@ const styles = props => ({
         display:"flex",
         justifyContent:"center",
         alignItems:"center",
-        background: 'rgb(0,0,0)',
+        // background: 'rgb(0,0,0)',
         background: 'radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(73,70,252,1) 100%)',
         border: '2px solid white',
         marginTop:"20px",
