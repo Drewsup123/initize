@@ -104,7 +104,7 @@ class BoardRoom extends React.Component{
 
     sendFile = () => {
         const {file} = this.state;
-        if (file !== null || file != ""){
+        if (file !== null || file !== ""){
             const metaData = {contentType: mime.lookup(file.name)};
             const fileUrl = this.uploadFile(file, metaData);
             console.log("FILE URL", fileUrl)

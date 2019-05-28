@@ -8,7 +8,6 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Avatar from '@material-ui/core/Avatar';
 import moment from 'moment';
 import CloseIcon from '@material-ui/icons/Close'
-import zIndex from '@material-ui/core/styles/zIndex';
 import Fab from '@material-ui/core/Fab';
 
 class PrivateChat extends React.Component {
