@@ -145,6 +145,11 @@ body{
     background:rgba(248, 248, 248, 0.521)
 }
 
+.purchase-options{
+    display:flex;
+    flex-direction: row;
+}
+
 /* Board Room Css */
 .board-room{
     width:90%;
