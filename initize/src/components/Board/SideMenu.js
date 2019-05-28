@@ -14,6 +14,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 function SideMenu(props){
     const [inviteCode, setInviteCode] = React.useState("");
@@ -21,6 +25,7 @@ function SideMenu(props){
     const [privateChatParams, setPrivateChatParams] = React.useState({name:"", uid: "", profilePicture: ""})
     const [inviteOpen, setInviteOpen] = React.useState(false);
     const [settingsOpen, setSettingsOpen] = React.useState(false);
+    const [newBoardName, setNewBoardName] = React.useState('');
     console.log("This is props sideMenu", props)
 
     const getDate = date => {
@@ -49,6 +54,23 @@ function SideMenu(props){
         setIsOpen(false)
     }
 
+    const openSettings = () => {
+        setSettingsOpen(true);
+    }
+
+    const onChangeHandler = e => {
+        setNewBoardName(e.target.value);
+    }
+
+    const changeBoardName = e => {
+        firebase.database().ref('/boards/' + props.match.params.id).update({name : newBoardName}).then(res => {
+            alert("Board name was changed to "+ newBoardName);
+        })
+        .catch(err => {
+            alert("There was an error updating your board name")
+        })
+    }
+
     // const removeUserFromBoard = e => {
         // props.users[user].name, props.users[user].uid, props.users[user].profilePicture)
     // }
@@ -59,7 +81,7 @@ function SideMenu(props){
                 <h1 className="side-menu-header">{props.boardName}</h1>
                 <h6>Created on: {getDate(props.createdAt)}</h6>
             </div>
-            {props.boardOwner.uid === props.uid ? <Button color="primary">Edit Settings/Upgrade</Button> : null}
+            {props.boardOwner.uid === props.uid ? <Button color="primary" onClick={openSettings}>Edit Settings/Upgrade</Button> : null}
             <hr />
             <h2>Rooms</h2>
             <div className="side-menu-links">
@@ -97,9 +119,80 @@ function SideMenu(props){
                 value={inviteCode}
                 style={{textAlign: "center"}}
                 />
-                </DialogContent>
+            </DialogContent>
                 <DialogActions>
                     <Button onClick={()=>setInviteOpen(false)} color="primary">
+                    Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Dialog for Settings */}
+            <Dialog
+            open={settingsOpen}
+            onClose={()=>setSettingsOpen(false)}
+            aria-labelledby="form-dialog-title"
+            >
+            <DialogTitle id="form-dialog-title" style={{textAlign:"center"}}>Board Settings</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Board Name
+                </DialogContentText>
+                <TextField
+                fullWidth
+                value={newBoardName}
+                style={{textAlign: "center"}}
+                onChange={onChangeHandler}
+                />
+                <Button onClick={changeBoardName}>Change Name</Button>
+                <h2 style={{textAlign:"center"}}>Upgrade Board</h2>
+                <section className="purchase-options">
+                    <Card>
+                        <CardContent>
+                            <Typography color="textSecondary" gutterBottom>
+                            Small Team
+                            </Typography>
+                            <Typography variant="h5" component="h2">
+                                Have up to 20 members in a board
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <Button size="small">Purchase</Button>
+                        </CardActions>
+                    </Card>
+
+                    <Card>
+                        <CardContent>
+                            <Typography color="textSecondary" gutterBottom>
+                            Medium Team
+                            </Typography>
+                            <Typography variant="h5" component="h2">
+                                Have up to 50 members in a board
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <Button size="small">Purchase</Button>
+                        </CardActions>
+                    </Card>
+
+                    <Card>
+                        <CardContent>
+                            <Typography color="textSecondary" gutterBottom>
+                                Large Team
+                            </Typography>
+                            <Typography variant="h5" component="h2">
+                                Have up to 100 members in a board
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <Button size="small">Purchase</Button>
+                        </CardActions>
+                    </Card>
+                </section>
+                
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={()=>setSettingsOpen(false)} color="primary">
                     Cancel
                     </Button>
                 </DialogActions>
