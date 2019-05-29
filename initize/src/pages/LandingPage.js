@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Login from './Login';
 import SignUp from './SignUp';
 import './LandingPage.css';
-import logo from '../components/Global/logo_transparent.png'
+import logo from '../components/Global/logo_transparent.png';
 
 // Landing Page of the Application
 export default function LandingPage(){

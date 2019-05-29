@@ -90,9 +90,9 @@ class BoardRoom extends React.Component{
 
     uploadFile = (file, metaData) => {
         // Sets the upload path and creates the ref with the file extension 
-        const uploadPath = `/boardrooms/${this.props.match.params.id}/${uuidv4()}.${metaData.contentType}`;
-        firebase.storage().ref().child(uploadPath).put(file, metaData).then(snapshot => {
-            snapshot.ref.getDownloadURL().then(url => {
+        const uploadPath = `/boardrooms/${this.props.match.params.id}/${uuidv4()}.jpg`;
+        firebase.storage().ref(uploadPath).put(file, metaData).then(snapshot => {
+            snapshot.ref.getDownloadURL().getResult().then(url => {
                 return(url)
             })
             console.log("Storage Response")
@@ -102,7 +102,8 @@ class BoardRoom extends React.Component{
         })
     }
 
-    sendFile = () => {
+    sendFile = e => {
+        e.preventDefault();
         const {file} = this.state;
         if (file !== null || file !== ""){
             const metaData = {contentType: mime.lookup(file.name)};
@@ -117,7 +118,8 @@ class BoardRoom extends React.Component{
                     uid: this.props.uid,
                 },
             };
-            firebase.database().ref('boardRooms').child(this.props.match.params.id)
+            alert(this.props.match.params.id)
+            firebase.database().ref('/boardRooms/').child(this.props.match.params.id)
             .push()
             .set(message).then(res => {
             console.log(res);
