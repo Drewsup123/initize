@@ -9,7 +9,7 @@
     "firebase": "^6.0.2",
     "firebase-tools": "^6.9.1",
     "mime-types": "^2.1.24",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "^16.8.6",
     "react-chat-window": "^1.2.1",
     "react-dom": "^16.8.6",
